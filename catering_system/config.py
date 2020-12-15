@@ -1,6 +1,14 @@
 # encoding:utf-8
 DEBUG = True
 
+# 缓存的ip, 端口， 数据库
+CACHE_TYPE = 'redis'
+CACHE_REDIS_HOST = '127.0.0.1'
+CACHE_REDIS_PORT = 6370
+CACHE_REDIS_DB = 0
+
+REDIS_URL = "redis://localhost:6379/0"
+
 DB_USERNAME = 'root'
 DB_PASSWORD = '123456'
 DB_HOST = '127.0.0.1'
