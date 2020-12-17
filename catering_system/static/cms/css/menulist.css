@@ -1,4 +1,11 @@
 
 .add-menu{
     margin-top: 1em;
+    margin-bottom: 1em;
+}
+.submit-btn{
+        margin-top: 1em;
+}
+th{
+    color: #FFF5EF!important;
 }

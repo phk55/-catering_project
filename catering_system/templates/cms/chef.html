@@ -1,0 +1,143 @@
+{% extends 'cms/cms_base.html' %}
+{% block title %}
+    人员管理
+{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ static('cms/css/chef.css') }}">
+    <script src="{{ static('cms/js/chef.js') }}"></script>
+
+
+{% endblock %}
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-2">
+            <div class="chef-name">姓名</div>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+        </div>
+        <div class="col-md-2">
+            <div class="chef-name">姓名</div>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+        </div>
+        <div class="col-md-2">
+            <div class="chef-name">姓名</div>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+        </div>
+        <div class="col-md-2">
+            <div class="chef-name">姓名</div>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+        </div>
+        <div class="col-md-2">
+            <div class="chef-name">姓名</div>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+            <ul class="row">
+                <li class="col-md-5">55</li>
+                <li class="col-md-5">55</li>
+            </ul>
+        </div>
+        <div class="col-md-1 add-btn-p">
+            <div class="add-btn">添加</div>
+        </div>
+
+
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade " id="add-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">编辑厨师信息</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="add-div">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">厨师</span>
+                            </div>
+                            <input name="chef_name" type="text" class="form-control" placeholder="输入厨师姓名"
+                                   aria-label="name"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">烹饪</span>
+                            </div>
+                            <select class="selectpicker show-tick form-control" title="--请选择菜品--" data-size="10"
+                                    name="user_id" id=""
+                                    data-live-search="true" multiple="multiple" aria-describedby="basic-addon1"
+                                    aria-label="name">
+                                {% for menu in menus %}
+                                    <option value="{{ menu.id }}">{{ menu.menu_name }}</option>
+                                {% endfor %}
+
+
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

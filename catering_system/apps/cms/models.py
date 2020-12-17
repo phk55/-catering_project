@@ -1,5 +1,5 @@
 # encoding:utf-8
-from catering_score import db
+from exit import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -29,3 +29,12 @@ class CMSUser(db.Model):
     def check_password(self, raw_password):
         result = check_password_hash(self._password, raw_password)
         return result
+
+
+class MenuModels(db.Model):
+    __tablename__ = 'menu'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    menu_name = db.Column(db.String(20), nullable=False)
+    weighted_value = db.Column(db.Integer, nullable=False)
+    pic_name = db.Column(db.Text)
+    describe_info = db.Column(db.Text)

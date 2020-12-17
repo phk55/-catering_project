@@ -13,6 +13,9 @@
           content="admin template, Frest admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="PIXINVENT">
     <title>{% block title %}{% endblock %}</title>
+
+    {% include "common/_head.html" %}
+
     <link rel="apple-touch-icon" href="../../../app-assets/images/ico/apple-icon-120.png">
     <link rel="shortcut icon" type="image/x-icon" href="../../static/cms/Frest/app-assets/images/ico/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700"
@@ -23,7 +26,6 @@
     <link rel="stylesheet" type="text/css" href="../../static/cms/Frest/app-assets/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="../../static/cms/Frest/app-assets/vendors/css/extensions/dragula.min.css">
     <!-- END: Vendor CSS-->
-    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="../../static/cms/Frest/app-assets/css/bootstrap-extended.css">
     <link rel="stylesheet" type="text/css" href="../../static/cms/Frest/app-assets/css/colors.css">
@@ -39,7 +41,6 @@
     <!-- BEGIN: Custom CSS-->
 {#    <link rel="stylesheet" type="text/css" href="../../../assets/css/style.css">#}
     <!-- END: Custom CSS-->
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {% block head %}{% endblock %}
 
 </head>
@@ -287,7 +288,7 @@
     <!-- Horizontal menu content-->
     <div class="navbar-container main-menu-content" data-menu="menu-container">
         <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="filled">
-            <li class="dropdown nav-item"><a class="dropdown-toggle nav-link" href="cms_base.html"><i
+            <li class="dropdown nav-item"><a class="dropdown-toggle nav-link" href="{{ url_for('cms.index') }}"><i
                     class="menu-livicon"
                     data-icon="desktop"></i><span
                     data-i18n="Dashboard">首页</span></a></li>
@@ -296,7 +297,7 @@
                     class="menu-livicon" data-icon="briefcase"></i><span>aa</span></a>
 
             </li>
-            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#"><i
+            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="{{ url_for('cms.chef') }}"><i
                     class="menu-livicon" data-icon="thumbnails-big"></i><span>人员</span></a>
 
             </li>

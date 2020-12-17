@@ -1,4 +1,11 @@
 # encoding:utf-8
+import os
+from datetime import timedelta
+
+SECRET_KEY = os.urandom(24)
+PERMANENT_SESSION_LIFETIME = timedelta(hours=10)
+SESSION_REFRESH_EACH_REQUEST = True
+
 DEBUG = True
 
 # 缓存的ip, 端口， 数据库
@@ -22,3 +29,11 @@ DB_URI = "mysql+pymysql://{username}:{password}@{host}:{port}/{db}?charset=utf8"
                                                                                         )
 SQLALCHEMY_DATABASE_URI = DB_URI
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+# 七牛云配置
+# UEditor的相关配置
+UEDITOR_UPLOAD_TO_QINIU = True
+UEDITOR_QINIU_ACCESS_KEY = "yvIkBLZWYNsRefcCkwDem5CoEwqcLkuyNgrvvwAk"
+UEDITOR_QINIU_SECRET_KEY = "e18eaMAEMPfqc2Vu2WtEbxpZo-HP2YqZP40Q-bmz"
+UEDITOR_QINIU_BUCKET_NAME = "apdatabase"
+UEDITOR_QINIU_DOMAIN = "http://qlf6t33mk.hn-bkt.clouddn.com/"
