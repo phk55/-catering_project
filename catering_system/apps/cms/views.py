@@ -1,9 +1,9 @@
 # encoding:utf-8
 import config
-from flask import Blueprint, render_template, request, g
+from flask import Blueprint, render_template, request, g, json
 from exit import redis_db, db
 from utils import restful, qiniuupload
-from .models import MenuModels
+from .models import MenuModels, CMSUser
 import datetime
 import threading
 
@@ -58,7 +58,45 @@ def addmenulist():
 def chef():
     if request.method == 'GET':
         menus = MenuModels.query.order_by(MenuModels.weighted_value.desc()).all()
+        chefs = CMSUser.query.filter_by(TAG=1).all()
         context = {
-            'menus': menus
+            'menus': menus,
+            'chefs': chefs
         }
-        return render_template('cms/chef.html',**context)
+        return render_template('cms/chef.html', **context)
+    else:
+        chef_name = request.form['chef_name']
+        menu_id_data = request.form['menu_id_data']
+        menu_id_list = json.loads(menu_id_data)
+
+        user = CMSUser.query.filter_by(username=chef_name).first()
+
+        if user and int(user.TAG) != 0:
+            for old_menu in user.menus:
+                user.menus.remove(old_menu)
+            db.session.commit()
+            for menu_id in menu_id_list:
+                menu = MenuModels.query.get(int(menu_id))
+                user.menus.append(menu)
+            db.session.add(user)
+            db.session.commit()
+        else:
+            user = CMSUser(username=chef_name, password=88888888, phone_number=1111, TAG=1)
+            for menu_id in menu_id_list:
+                menu = MenuModels.query.get(int(menu_id))
+                user.menus.append(menu)
+            db.session.add(user)
+            db.session.commit()
+
+        return restful.success()
+
+
+@bp.route('/delchef/', methods=['POST'])
+def delchef():
+    chef_name = request.form['chef_name']
+    user = CMSUser.query.filter_by(username=chef_name).first()
+    if not user:
+        return restful.params_error(message='信息有误！')
+    user.TAG = 0
+    db.session.commit()
+    return restful.success()

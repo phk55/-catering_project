@@ -35,6 +35,15 @@
     background: #ececec;
     width: 100%;
     padding: 1em 1em 1em 1em;
+    /*cursor: pointer;*/
+}
+
+.btn-group{
+    float: right;
+    cursor: pointer;
+}
+.dropdown-menu i{
+    margin-right: 1em;
 }
 
 .add-div div {
@@ -44,12 +53,27 @@
 .filter-option-inner-inner {
     color: #808080;
 }
-
-li {
+li{
     list-style: none;
+}
+.menu-ul li {
+    list-style: none;
+    margin: 0 0 0 0 ;
+    padding: 0 0 0 0 ;
+
+}
+.menu-ul{
+    margin-top: 1em;
 }
 .add-btn-p{
     display: table;
+    cursor: pointer;
+
+}
+.add-btn-p:hover{
+    background: #00b3ff;
+    color: #FFF5EF;
+    font-weight: bold;
 }
 .add-btn {
 

@@ -10,81 +10,34 @@
 {% endblock %}
 {% block main_content %}
     <div class="row">
-        <div class="col-md-2">
-            <div class="chef-name">姓名</div>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-        </div>
-        <div class="col-md-2">
-            <div class="chef-name">姓名</div>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-        </div>
-        <div class="col-md-2">
-            <div class="chef-name">姓名</div>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-        </div>
-        <div class="col-md-2">
-            <div class="chef-name">姓名</div>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-        </div>
-        <div class="col-md-2">
-            <div class="chef-name">姓名</div>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-            <ul class="row">
-                <li class="col-md-5">55</li>
-                <li class="col-md-5">55</li>
-            </ul>
-        </div>
+        {% for chef in chefs %}
+            <div class="col-md-2">
+                <div class="chef-name" data-username="{{ chef.username }}">
+                    {{ chef.username }}
+                    <!-- Example single danger button -->
+                    <div class="btn-group">
+
+                        <i class="bx bx-dots-vertical-rounded"  data-toggle="dropdown"></i>
+                        <div class="dropdown-menu">
+                            <btn class="dropdown-item edit-btn" ><i class="bx bx-edit"> </i> 编辑</btn>
+                            <btn class="dropdown-item delete-btn">
+                                <i class="bx bx-trash mr-50"> </i> 删除
+                            </btn>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="row menu-ul">
+                    {% for menu in chef.menus %}
+                        <li class="col-md-5">{{ loop.index }}. {{ menu.menu_name }}</li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        {% endfor %}
+
+
+
         <div class="col-md-1 add-btn-p">
             <div class="add-btn">添加</div>
         </div>
@@ -119,7 +72,7 @@
                                 <span class="input-group-text" id="basic-addon1">烹饪</span>
                             </div>
                             <select class="selectpicker show-tick form-control" title="--请选择菜品--" data-size="10"
-                                    name="user_id" id=""
+                                    name="" id="menu_id"
                                     data-live-search="true" multiple="multiple" aria-describedby="basic-addon1"
                                     aria-label="name">
                                 {% for menu in menus %}
@@ -134,7 +87,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-primary save-btn">保存</button>
                 </div>
             </div>
         </div>
