@@ -45,6 +45,21 @@ class MenuModels(db.Model):
     menu_name = db.Column(db.String(20), nullable=False)
     weighted_value = db.Column(db.Integer, nullable=False)
     pic_name = db.Column(db.Text)
+    ewm_name=db.Column(db.Text)
     describe_info = db.Column(db.Text)
 
     menu_to_users = db.relationship('CMSUser', secondary=user_menu, backref=('menus', {'lazy': 'dynamic'}))
+
+
+class ScoreModel(db.Model):
+    __tablename__ = 'score_data'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    score1 = db.Column(db.Integer, nullable=False)
+    score2 = db.Column(db.Integer, nullable=False)
+    score3 = db.Column(db.Integer, nullable=False)
+    suggest = db.Column(db.Text)
+    crate_time = db.Column(db.DateTime, default=datetime.now)
+
+    menu_id = db.Column(db.Integer, db.ForeignKey('menu.id'), nullable=False)
+
+    score_menu = db.relationship('MenuModels', backref='menu_score')

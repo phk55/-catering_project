@@ -2,10 +2,11 @@
 import config
 from flask import Blueprint, render_template, request, g, json
 from exit import redis_db, db
-from utils import restful, qiniuupload
-from .models import MenuModels, CMSUser
+from utils import restful, qiniuupload, ewm
+from .models import MenuModels, CMSUser, ScoreModel
 import datetime
 import threading
+from ..common_func.month_rane import get_month_range
 
 bp = Blueprint('cms', __name__, url_prefix='/cms')
 
@@ -14,6 +15,7 @@ bp = Blueprint('cms', __name__, url_prefix='/cms')
 def index():
     redis_p = redis_db.pipeline()
     redis_p.set('ss3', 'fsdfd2')
+
     redis_p.execute()
     return render_template('cms/cms_index.html')
 
@@ -47,10 +49,26 @@ def addmenulist():
     pic_name = str(datetime.datetime.now().strftime('%Y%m%d%H%M%S')) + '_' + pic_file.filename
     t1 = threading.Thread(target=qiniuupload.upload_qiniu, args=(pic_file, pic_name))
     t1.start()
+
     new_menu = MenuModels(menu_name=menu_name, weighted_value=int(weighted_value), describe_info=describe_info,
                           pic_name=pic_name)
+
     db.session.add(new_menu)
     db.session.commit()
+    t2 = threading.Thread(target=ewm.qr_with_central_img,
+                          args=(config.SCORE_URL + str(new_menu.id), config.UEDITOR_QINIU_DOMAIN + pic_name,
+                                'ewm_' + str(new_menu.id) + '.png'))
+    t2.start()
+    t2.join()
+    #
+    # ewm_filename = ewm.qr_with_central_img(link=config.SCORE_URL + str(new_menu.id),
+    #                                        central_picture=config.UEDITOR_QINIU_DOMAIN + pic_name,
+    #                                        output_file='ewm_' + str(new_menu.id) + '.png')
+    new_menu.ewm_name = 'ewm_' + str(new_menu.id) + '.png'
+
+    db.session.add(new_menu)
+    db.session.commit()
+
     return restful.success()
 
 
@@ -99,4 +117,28 @@ def delchef():
         return restful.params_error(message='信息有误！')
     user.TAG = 0
     db.session.commit()
+    return restful.success()
+
+
+@bp.route('/scoreall/')
+def scoreall():
+    menus = MenuModels.query.order_by(MenuModels.weighted_value.desc()).all()
+
+    month_list = get_month_range(config.START_TIME, datetime.datetime.now())
+
+    month_list.reverse()
+    context = {
+        'menus': menus,
+        'month_list': month_list
+    }
+    return render_template('cms/score_all.html', **context)
+
+
+@bp.route('/scoredata/', methods=['POST'])
+def scoredata():
+    cur_month = request.form['cur_month']
+    cur_menu_id = request.form['cur_menu_id']
+    cur_month = cur_month.split('. ')[1]
+    print(cur_month)
+    print(cur_menu_id)
     return restful.success()

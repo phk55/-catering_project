@@ -1,0 +1,67 @@
+.score-row {
+    /*height: 600px;*/
+}
+
+.col-div {
+    /*text-align: center;*/
+    margin: 1em;
+    border: 1px #d9d9d9 solid;
+    border-radius: 5px;
+    min-height: 100px;
+
+    filter: progid:DXImageTransform.Microsoft.Shadow(color=#c2c2c2, direction=120, strength=4);
+
+    -moz-box-shadow: 2px 2px 10px #c2c2c2;
+
+    -webkit-box-shadow: 2px 2px 10px #c2c2c2;
+
+    box-shadow: 2px 2px 10px #c2c2c2;
+}
+
+.min-col-div {
+    margin-bottom: 3em;
+    height: 300px;
+
+}
+
+.title-div {
+    height: 10%;
+}
+
+.menu-div {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.menu-div::-webkit-scrollbar {
+    display: none;
+}
+
+.min-data-div{
+    margin-top: 1em;
+    height: 50%;
+    border-right: #aaaaaa 3px solid;
+}
+.main-score-data table{
+   width: 95%;
+    margin: 2em;
+}
+
+.main-score-data{
+    height: 620px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.main-score-data::-webkit-scrollbar {
+    display: none;
+}
+
+.chef-div{
+    /*margin-top: 1em;*/
+    height: 150px;
+}
+.echart-div{
+    height: 250px;
+    border-top: #acacac 1px solid;
+}

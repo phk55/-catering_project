@@ -1,6 +1,7 @@
 # encoding:utf-8
 import os
 from datetime import timedelta
+import datetime
 
 SECRET_KEY = os.urandom(24)
 PERMANENT_SESSION_LIFETIME = timedelta(hours=10)
@@ -36,4 +37,16 @@ UEDITOR_UPLOAD_TO_QINIU = True
 UEDITOR_QINIU_ACCESS_KEY = "yvIkBLZWYNsRefcCkwDem5CoEwqcLkuyNgrvvwAk"
 UEDITOR_QINIU_SECRET_KEY = "e18eaMAEMPfqc2Vu2WtEbxpZo-HP2YqZP40Q-bmz"
 UEDITOR_QINIU_BUCKET_NAME = "apdatabase"
-UEDITOR_QINIU_DOMAIN = "http://qlf6t33mk.hn-bkt.clouddn.com/"
+UEDITOR_QINIU_DOMAIN = "http://qlf6t33mk.hn-bkt.clouddn.com/"  # 七牛云域名
+
+SCORE_DICT = {
+    '不推荐': 1,
+    '一般': 2,
+    '不错': 3,
+    '很棒': 4,
+    '极力推荐！': 5,
+}  # 评分对应的分数
+
+SCORE_URL = 'http://127.0.0.1:5000/score/'  # 评分页面网，后接菜品id
+
+START_TIME=datetime.date(2020,1,1)

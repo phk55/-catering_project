@@ -71,10 +71,9 @@
                  <td>{{ menu.menu_name }}</td>
                  <td>{{ menu.describe_info }}</td>
                  <td>{{ menu.weighted_value }}</td>
-                 <td>待生成</td>
+                 <td><img style="width: 4em" src="{{ g.qiniu_url }}{{ menu.ewm_name }}" alt=""></td>
                  <td><i class="bx bx-edit"></i></td>
                  </tr>
-
             {% endfor %}
             </tbody>
         </table>

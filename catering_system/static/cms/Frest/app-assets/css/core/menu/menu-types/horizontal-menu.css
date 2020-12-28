@@ -253,14 +253,14 @@
   color: inherit;
 }
 
-.horizontal-menu .navbar-expand-sm .navbar-nav .dropdown .dropdown-toggle:after {
-  content: "\ea4f";
-  font-family: 'boxicons';
-  font-size: 1.2rem;
-  color: #8494a7;
-  display: inline-block;
-  right: 15px;
-}
+/*.horizontal-menu .navbar-expand-sm .navbar-nav .dropdown .dropdown-toggle:after {*/
+/*  content: "\ea4f";*/
+/*  font-family: 'boxicons';*/
+/*  font-size: 1.2rem;*/
+/*  color: #8494a7;*/
+/*  display: inline-block;*/
+/*  right: 15px;*/
+/*}*/
 
 .horizontal-menu.menu-collapsed #main-menu-navigation > li .nav-link {
   padding-top: 0.6rem;
