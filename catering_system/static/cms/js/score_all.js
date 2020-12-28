@@ -25,6 +25,58 @@ function get_data(month_lis, menu_lis, cur_month, cur_menu_id) {
         'success': function (data) {
             if (data['code'] === 200) {
 
+                var score_data = data['data']['score_data']
+                var chef_data = data['data']['chef_name']
+
+                // console.log(data['data'])
+                // console.log(Object.keys(score_data))
+                var table = document.getElementById('score_table')
+                var old_tb = document.getElementById('tb')
+                old_tb.remove()
+                var tb=document.createElement('tbody')
+                tb.id='tb'
+                table.appendChild(tb)
+
+                var score_data_keys = Object.keys(score_data)
+                for (var i = 0; i < score_data_keys.length; i++) {
+                    var tr = document.createElement('tr')
+                    var td1 = document.createElement('td')
+                    td1.innerText = i + 1
+                    var td2 = document.createElement('td')
+                    td2.innerText = score_data[i]['score1']
+                    var td3 = document.createElement('td')
+                    td3.innerText = score_data[i]['score2']
+                    var td4 = document.createElement('td')
+                    td4.innerText = score_data[i]['score3']
+                    var td5 = document.createElement('td')
+                    td5.innerText = score_data[i]['suggest']
+
+                    var td6 = document.createElement('td')
+                    td6.innerText = score_data[i]['create_time']
+                    tr.appendChild(td1)
+                    tr.appendChild(td2)
+                    tr.appendChild(td3)
+                    tr.appendChild(td4)
+                    tr.appendChild(td5)
+                    tr.appendChild(td6)
+                    tb.appendChild(tr)
+                }
+
+
+                var chef_div=document.getElementById('chef_div')
+                var old_user_div=document.getElementById('user_div')
+                old_user_div.remove()
+                var user_div=document.createElement('div')
+                user_div.id='user_div'
+                chef_div.appendChild(user_div)
+
+                for (var j=0;j<chef_data.length;j++){
+                    var span=document.createElement('span')
+                    span.innerText=chef_data[j]
+                    user_div.appendChild(span)
+                }
+
+
             } else {
                 myalert.alertInfo('信息有误！')
             }

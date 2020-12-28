@@ -45,7 +45,7 @@ class MenuModels(db.Model):
     menu_name = db.Column(db.String(20), nullable=False)
     weighted_value = db.Column(db.Integer, nullable=False)
     pic_name = db.Column(db.Text)
-    ewm_name=db.Column(db.Text)
+    ewm_name = db.Column(db.Text)
     describe_info = db.Column(db.Text)
 
     menu_to_users = db.relationship('CMSUser', secondary=user_menu, backref=('menus', {'lazy': 'dynamic'}))
@@ -58,8 +58,19 @@ class ScoreModel(db.Model):
     score2 = db.Column(db.Integer, nullable=False)
     score3 = db.Column(db.Integer, nullable=False)
     suggest = db.Column(db.Text)
-    crate_time = db.Column(db.DateTime, default=datetime.now)
+    create_time = db.Column(db.DateTime, default=datetime.now)
 
     menu_id = db.Column(db.Integer, db.ForeignKey('menu.id'), nullable=False)
 
-    score_menu = db.relationship('MenuModels', backref='menu_score')
+    score_menu = db.relationship('MenuModels', backref=db.backref('menu_score', lazy='dynamic'))
+
+    def get_data(self):
+        score_data = {
+            'score1': self.score1,
+            'score2': self.score2,
+            'score3': self.score3,
+            'suggest': self.suggest,
+            'create_time': str(self.create_time)
+
+        }
+        return score_data

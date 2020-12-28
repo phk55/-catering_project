@@ -1,11 +1,13 @@
 # encoding:utf-8
 import config
-from flask import Blueprint, render_template, request, g, json
+import calendar
+import datetime
+import threading
+
+from flask import Blueprint, render_template, request, g, json, jsonify
 from exit import redis_db, db
 from utils import restful, qiniuupload, ewm
 from .models import MenuModels, CMSUser, ScoreModel
-import datetime
-import threading
 from ..common_func.month_rane import get_month_range
 
 bp = Blueprint('cms', __name__, url_prefix='/cms')
@@ -139,6 +141,28 @@ def scoredata():
     cur_month = request.form['cur_month']
     cur_menu_id = request.form['cur_menu_id']
     cur_month = cur_month.split('. ')[1]
-    print(cur_month)
-    print(cur_menu_id)
-    return restful.success()
+    cur_menu = MenuModels.query.get(cur_menu_id)
+
+    year, month = cur_month.split('-')
+    week, month_days = calendar.monthrange(int(year), int(month))  # 查看一一个月有几天，输出元祖（(2, 31)）,2代表第一天星期几
+    start_time = cur_month + '-01'
+    end_time = cur_month + '-' + str(month_days)
+    scores = cur_menu.menu_score.filter(ScoreModel.create_time.between(start_time, end_time)).order_by(
+        ScoreModel.create_time.desc()).all()
+    t = {}
+
+    chefs = cur_menu.menu_to_users
+    chef_user = [i.username for i in chefs]
+    chef_user=list(set(chef_user))
+
+    for i in range(0, len(scores)):
+        t[str(i)] = scores[i].get_data()
+
+    tem_dict = {'score_data': t, 'chef_name': chef_user}
+    data = {
+        'code': 200,
+        'data': tem_dict,
+        'message': ''
+    }
+    print(data)
+    return jsonify(data)
