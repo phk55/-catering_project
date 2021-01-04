@@ -11,15 +11,16 @@
 {% block main_content %}
     <div class="row">
         {% for chef in chefs %}
-            <div class="col-md-2">
+            <div class="col-md-2" id="{{ chef.username }}">
                 <div class="chef-name" data-username="{{ chef.username }}">
                     {{ chef.username }}
                     <!-- Example single danger button -->
                     <div class="btn-group">
-
-                        <i class="bx bx-dots-vertical-rounded"  data-toggle="dropdown"></i>
+                        <i class="bx bx-dots-vertical-rounded" data-toggle="dropdown"></i>
                         <div class="dropdown-menu">
-                            <btn class="dropdown-item edit-btn" ><i class="bx bx-edit"> </i> 编辑</btn>
+                            <btn class="dropdown-item edit-btn">
+                                <i class="bx bx-edit"> </i> 编辑
+                            </btn>
                             <btn class="dropdown-item delete-btn">
                                 <i class="bx bx-trash mr-50"> </i> 删除
                             </btn>
@@ -29,7 +30,7 @@
 
                 <ul class="row menu-ul">
                     {% for menu in chef.menus %}
-                        <li class="col-md-5">{{ loop.index }}. {{ menu.menu_name }}</li>
+                        <li class="col-md-5" value="{{ menu.id }}">{{ loop.index }}. {{ menu.menu_name }}</li>
                     {% endfor %}
                 </ul>
 
@@ -60,7 +61,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">厨师</span>
                             </div>
-                            <input name="chef_name" type="text" class="form-control" placeholder="输入厨师姓名"
+                            <input name="chef_name" type="text" class="form-control" id="chef-name-input"
+                                   placeholder="输入厨师姓名"
                                    aria-label="name"
                                    aria-describedby="basic-addon1">
                         </div>
@@ -78,6 +80,7 @@
 
 
                             </select>
+                            <input style="display: none" type="text" id="tag-input" value="1">
                         </div>
 
                     </div>

@@ -26,6 +26,8 @@
 
 .title-div {
     height: 10%;
+    padding-top: 0.2em;
+    padding-left: 0.5em;
 }
 
 .menu-div {
@@ -38,40 +40,67 @@
     display: none;
 }
 
-.min-data-div{
+.min-data-div {
     margin-top: 1em;
     height: 50%;
     border-right: #aaaaaa 3px solid;
 }
-.main-score-data table{
-   width: 95%;
+
+.main-score-data table {
+    width: 95%;
     margin: 2em;
 }
 
-.main-score-data{
+.main-score-data {
     height: 620px;
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
 .main-score-data::-webkit-scrollbar {
     display: none;
 }
 
-.chef-div{
+.chef-div {
     /*margin-top: 1em;*/
     height: 150px;
+    text-align: center;
+    font-size: 13px;
 }
-.echart-div{
+
+.chef-title {
+    /*margin-top: 1em;*/
+
+
+}
+
+#user_div {
+    margin-top: 1em;
+
+}
+
+
+#user_div span {
+    margin-right: 2em;
+
+}
+.menu-title{
+    margin: 1em 0 0 1em;
+}
+
+.echart-div {
     height: 250px;
     border-top: #acacac 1px solid;
 }
 
-.th1{
+.th1 {
     width: 13%;
 }
-.th2{
+
+.th2 {
     width: 28%;
 }
-.th3{
+
+.th3 {
     width: 20%;
 }

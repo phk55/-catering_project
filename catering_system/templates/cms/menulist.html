@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-2">
             <button class="btn btn-primary btn-block add-menu">+添加菜品</button>
-            <div class="add-content">
+            <div class="add-content hid-css" id="add-content">
                 <form id="uploadForm" enctype="multipart/form-data">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -27,7 +27,6 @@
                                aria-label="Username"
                                aria-describedby="basic-addon1">
                     </div>
-
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroupFileAddon01">图片</span>
@@ -45,41 +44,52 @@
                         <textarea name="describe_info" class="form-control" aria-label="With textarea"
                                   rows="5"></textarea>
                     </div>
-                    <button class="btn btn-warning btn-block submit-btn">提交</button>
+                    <div class="form-check form-check-inline hid-css" id="sold-div">
+                        <input class="form-check-input" name="sold-out" type="checkbox" id="sold-out" >
+                        <label class="form-check-label" for="sold-out" id="sold-label">下架</label>
+                    </div>
+                    <input style="display: none" type="text" name="old-menu">
+                    <button class="btn btn-warning btn-block submit-btn hid-css" id="sub-btn">提交</button>
+                    <button class="btn btn-warning btn-block edit-submit-btn hid-css"id="edit-btn">提交修改</button>
                 </form>
             </div>
 
         </div>
-        <div class="col-md-10">
-        <table class="table">
-            <thead class="table-dark">
-            <tr>
-                <th>序号</th>
-                <th>图片</th>
-                <th>菜名</th>
-                <th>简介</th>
-                <th>权重</th>
-                <th>二维码</th>
-                <th>编辑</th>
-            </tr>
-            </thead>
-            <tbody class="table-light">
-             {% for menu in menus %}
-                 <tr>
-                 <td>{{ loop.index }}</td>
-                 <td><img style="width: 5em" src="{{ g.qiniu_url }}{{ menu.pic_name }}" alt=""></td>
-                 <td>{{ menu.menu_name }}</td>
-                 <td>{{ menu.describe_info }}</td>
-                 <td>{{ menu.weighted_value }}</td>
-                 <td><img style="width: 4em" src="{{ g.qiniu_url }}{{ menu.ewm_name }}" alt=""></td>
-                 <td><i class="bx bx-edit"></i></td>
-                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="col-md-10 table-div">
+            <table class="table">
+                <thead class="table-dark">
+                <tr>
+                    <th>序号</th>
+                    <th>图片</th>
+                    <th>菜名</th>
+                    <th>简介</th>
+                    <th>权重</th>
+                    <th>二维码</th>
+                    <th>状态</th>
+                    <th>编辑</th>
+                </tr>
+                </thead>
+                <tbody class="table-light">
+                {% for menu in menus %}
+                    <tr data-menu-id="{{ menu.id }}">
+                        <td>{{ loop.index }}</td>
+                        <td><img style="width: 5em" src="{{ g.qiniu_url }}{{ menu.pic_name }}" alt=""></td>
+                        <td id="menu-name-{{ menu.id }}">{{ menu.menu_name }}</td>
+                        <td id="desc-{{ menu.id }}">{{ menu.describe_info }}</td>
+                        <td id="weighted-{{ menu.id }}">{{ menu.weighted_value }}</td>
+                        <td><img style="width: 4em" src="{{ g.qiniu_url }}{{ menu.ewm_name }}" alt=""></td>
 
+                        {% if menu.sold_out==1 %}
+                            <td id="sold-{{ menu.id }}">已下架</td>
+                        {% else %}
+                            <td id="sold-{{ menu.id }}">销售中</td>
+                        {% endif %}
 
-
+                        <td><i class="bx bx-edit edit-btn"></i></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}

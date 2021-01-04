@@ -3,6 +3,8 @@
     评分汇总
 {% endblock %}
 {% block head %}
+        {% include "common/_ecahrts.html" %}
+
     <link rel="stylesheet" href="{{ static('cms/css/score_all.css') }}">
     <script src="{{ static('cms/js/score_all.js') }}"></script>
 
@@ -15,32 +17,37 @@
             <div class="row">
                 <div class="col-md-2 min-data-div">
                     <div>
-                        <div class="chef-div" id="chef_div">厨师
-                        <div id="user_div"></div>
+                        <div class="chef-div" id="chef_div">
+                            <div class="chef-title">厨师</div>
+                            <div id="user_div"></div>
                         </div>
-                        <div class="echart-div">xiaoli</div>
-                        <div class="echart-div">xiaoli</div>
+                        <div class="echart-div">
+                            <div id="proportion" style="height: 100%"></div>
+                        </div>
+                        <div class="echart-div">
+                            <div id="detail_num" style="height: 100%"></div>
+                        </div>
                     </div>
                     <div>
                     </div>
                 </div>
                 <div class="col-md-10">
-                    <div>菜名</div>
+                    <div class="menu-title">菜名</div>
                     <div class="main-score-data table-responsive">
-                       <table class="table table-hover mb-0" id="score_table">
-                           <thead>
-                           <tr>
-                               <th class="th1">序号</th>
-                               <th class="th1">色</th>
-                               <th class="th1">香</th>
-                               <th class="th1">味</th>
-                               <th class="th2">建议</th>
-                               <th class="th3">时间</th>
-                           </tr>
-                           </thead>
-                           <tbody id="tb">
-                           </tbody>
-                       </table>
+                        <table class="table table-hover mb-0" id="score_table">
+                            <thead>
+                            <tr>
+                                <th class="th1">序号</th>
+                                <th class="th1">色</th>
+                                <th class="th1">香</th>
+                                <th class="th1">味</th>
+                                <th class="th2">建议</th>
+                                <th class="th3">时间</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tb">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -48,9 +55,9 @@
 
         <div class="col-md-2">
             <div class="col-div min-col-div">
-                <div>月份</div>
+                <div class="title-div">时间</div>
                 <div class="menu-div">
-                     <ul class="list-group">
+                    <ul class="list-group">
                         {% for month in month_list %}
                             {% if loop.first %}
                                 <li class="list-group-item active month-li">{{ loop.index }}. {{ month }}</li>
@@ -67,9 +74,11 @@
                     <ul class="list-group">
                         {% for menu in menus %}
                             {% if loop.first %}
-                                <li class="list-group-item active menu-li" value="{{ menu.id }}">{{ loop.index }}. {{ menu.menu_name }}</li>
+                                <li class="list-group-item active menu-li"
+                                    value="{{ menu.id }}">{{ loop.index }}. {{ menu.menu_name }}</li>
                             {% else %}
-                                <li class="list-group-item menu-li" value="{{ menu.id }}">{{ loop.index }}. {{ menu.menu_name }}</li>
+                                <li class="list-group-item menu-li"
+                                    value="{{ menu.id }}">{{ loop.index }}. {{ menu.menu_name }}</li>
                             {% endif %}
                         {% endfor %}
                     </ul>

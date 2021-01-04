@@ -46,6 +46,7 @@ class MenuModels(db.Model):
     weighted_value = db.Column(db.Integer, nullable=False)
     pic_name = db.Column(db.Text)
     ewm_name = db.Column(db.Text)
+    sold_out = db.Column(db.Integer, default=0)  # 1.为已下架
     describe_info = db.Column(db.Text)
 
     menu_to_users = db.relationship('CMSUser', secondary=user_menu, backref=('menus', {'lazy': 'dynamic'}))
@@ -57,6 +58,7 @@ class ScoreModel(db.Model):
     score1 = db.Column(db.Integer, nullable=False)
     score2 = db.Column(db.Integer, nullable=False)
     score3 = db.Column(db.Integer, nullable=False)
+    chefs = db.Column(db.Text)
     suggest = db.Column(db.Text)
     create_time = db.Column(db.DateTime, default=datetime.now)
 

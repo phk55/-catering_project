@@ -49,4 +49,4 @@ SCORE_DICT = {
 
 SCORE_URL = 'http://127.0.0.1:5000/score/'  # 评分页面网，后接菜品id
 
-START_TIME=datetime.date(2020,1,1)
+START_TIME=datetime.date(2020,1,5)

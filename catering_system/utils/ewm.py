@@ -16,17 +16,24 @@ def qr_with_central_img(link, central_picture, output_file):
     :return:
     """
     # 图片在二维码中心位置
-    # time.sleep(1)
+    exits = True
+    count = 0
+    while exits and count < 5:
+        try:
+            time.sleep(0.5)
+            response = requests.get(central_picture)  # 获取url图片
+            icon = Image.open(BytesIO(response.content))  # 这里是二维码中心的图片
+            exits = False
+        except:
+            time.sleep(1)
+            count += 1
+
     qr = qrcode.QRCode(
         version=5, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=8, border=4)
     qr.add_data(link)
     qr.make(fit=True)
     img = qr.make_image()
     img = img.convert("RGBA")
-
-    response = requests.get(central_picture)  # 获取url图片
-    icon = Image.open(BytesIO(response.content))  # 这里是二维码中心的图片
-
 
     # icon = Image.open(central_picture)  # 这里是二维码中心的图片
 
@@ -46,8 +53,8 @@ def qr_with_central_img(link, central_picture, output_file):
     h = int((img_h - icon_h) / 2)
     icon = icon.convert("RGBA")
     img.paste(icon, (w, h), icon)
-    img_byte=BytesIO()
-    img.save(img_byte,format('PNG'))
-    img_b=img_byte.getvalue()
+    img_byte = BytesIO()
+    img.save(img_byte, format('PNG'))
+    img_b = img_byte.getvalue()
     upload_qiniu2(img_b, output_file)
     return output_file
