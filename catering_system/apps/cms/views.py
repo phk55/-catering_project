@@ -1,24 +1,29 @@
 # encoding:utf-8
-import time
 import config
 import calendar
 import datetime
 import threading
 import uuid
+import re
+import random
 import pandas as pd
 
-from flask import Blueprint, render_template, request, g, json, jsonify
+from flask import Blueprint, render_template, request, json, jsonify, views, session, url_for, redirect
 from sqlalchemy import and_
 from exit import redis_db, db
 from utils import restful, qiniuupload, ewm
 from .models import MenuModels, CMSUser, ScoreModel
 from ..common_func.month_rane import get_month_range
 from ..common_func.pd_read import pd_read_sql
+from ..common_func.hyYz import SMS
+from .form import LoginForm, SignupForm
+from apps.common_func.decorators import login_required
 
 bp = Blueprint('cms', __name__, url_prefix='/cms')
 
 
 @bp.route('/')
+@login_required
 def index():
     redis_p = redis_db.pipeline()
     redis_p.set('ss3', 'fsdfd2')
@@ -27,7 +32,115 @@ def index():
     return render_template('cms/cms_index.html')
 
 
+class LoginView(views.MethodView):
+    def get(self, message=None):
+        # 获取上个页面的url
+        return_to = request.referrer
+        if return_to and return_to != request.url and return_to != url_for('cms.signup', _external=True):
+            return render_template('cms/login.html', return_to=return_to)
+        return render_template('cms/login.html')
+
+    def post(self):
+        form = LoginForm(request.form)
+        if form.validate():
+            print('aa')
+            phone = form.phone.data
+            password = form.pwd.data
+            verify = form.verify.data
+            if str(verify) == '1':
+                user = CMSUser.query.filter_by(phone_number=phone).first()
+                if user and user.check_password(password):
+                    session[config.USER_ID] = user.id
+                    session.permanent = True
+                    return restful.success()
+                else:
+                    return restful.params_error('*手机号或密码错误!')
+            else:
+                yz_code = redis_db.get(phone)
+                if not yz_code:
+                    return restful.params_error('验证码有误！')
+                yz_code = yz_code.decode()
+                if yz_code != verify:
+                    return restful.params_error('验证码有误！')
+                user = CMSUser.query.filter_by(phone_number=phone).first()
+                if user:
+                    session[config.USER_ID] = user.id
+                    session.permanent = True
+                    return restful.success()
+                else:
+                    return restful.params_error('*手机号或密码错误!')
+
+        else:
+            return restful.params_error(form.get_error())
+
+
+class SignupView(views.MethodView):
+    def get(self):
+        # 获取上个页面的url
+        return_to = request.referrer
+        if return_to and return_to != request.url:
+            return render_template('cms/signup.html', return_to=return_to)
+        return render_template('cms/signup.html')
+
+    def post(self):
+        form = SignupForm(request.form)
+        if form.validate():
+            username = form.username.data
+            phone = form.phone.data
+            pwd = form.pwd.data
+            verify = form.verify.data
+            invite = form.invite.data
+            yz_code = redis_db.get(phone)
+            if not yz_code:
+                return restful.params_error('验证码有误！')
+            yz_code = yz_code.decode()
+            if yz_code != verify:
+                return restful.params_error('验证码有误！')
+            if invite != config.INVITE:
+                return restful.params_error('邀请码有误！')
+            old_user = CMSUser.query.filter_by(phone_number=phone).first()
+            if old_user:
+                return restful.params_error(message='该员工号已被注册！')
+            user = CMSUser(username=username, phone_number=phone, password=pwd, TAG=2)
+            db.session.add(user)
+            db.session.commit()
+            return restful.success()
+        else:
+            return restful.params_error(message=form.get_error())
+
+
+bp.add_url_rule('/login/', view_func=LoginView.as_view('login'))
+bp.add_url_rule('/signup/', view_func=SignupView.as_view('signup'))
+
+
+@bp.route('/logout/')
+@login_required
+def logout():
+    del session[config.USER_ID]
+    return redirect(url_for('cms.login'))
+
+
+@bp.route('/mesyzcode/', methods=['POST'])
+def mesyzcode():
+    phone_number = request.form['phone_number']
+    phone_path = re.compile('1[3456789]\d{9}$')
+    if re.match(phone_path, phone_number):
+        print(phone_number)
+        code = [str(random.randint(0, 9)) for i in range(0, 6)]
+        code = ''.join(code)
+        sms = SMS(config.ACCOUNT, config.PWD)
+        sms.send_sms([phone_number], '您的验证码是：{}。请不要把验证码泄露给其他人。'.format(code))
+        print(code)
+        redis_p = redis_db.pipeline()
+        redis_p.set(phone_number, code)
+        redis_p.expire(phone_number, 300)
+        redis_p.execute()
+
+    return restful.success()
+
+
 @bp.route('/menulist/')
+@login_required
 def menulist():
     menus = MenuModels.query.order_by(MenuModels.weighted_value.desc()).all()
     context = {
@@ -37,6 +150,7 @@ def menulist():
 
 
 @bp.route('/addmenulist/', methods=['POST'])
+@login_required
 def addmenulist():
     menu_name = request.form['menu_name']
     weighted_value = request.form['weighted_value']
@@ -83,6 +197,7 @@ def addmenulist():
 
 
 @bp.route('/editmenu/', methods=['POST'])
+@login_required
 def editmenu():
     menu_name = request.form['menu_name']
     weighted_value = request.form['weighted_value']
@@ -142,10 +257,12 @@ def editmenu():
 
 
 @bp.route('/chef/', methods=['GET', 'POST'])
+@login_required
 def chef():
     if request.method == 'GET':
         menus = MenuModels.query.order_by(MenuModels.weighted_value.desc()).all()
         chefs = CMSUser.query.filter_by(TAG=1).all()
+
         context = {
             'menus': menus,
             'chefs': chefs
@@ -189,6 +306,7 @@ def chef():
 
 
 @bp.route('/delchef/', methods=['POST'])
+@login_required
 def delchef():
     chef_name = request.form['chef_name']
     user = CMSUser.query.filter_by(username=chef_name).first()
@@ -200,6 +318,7 @@ def delchef():
 
 
 @bp.route('/scoreall/')
+@login_required
 def scoreall():
     menus = MenuModels.query.order_by(MenuModels.weighted_value.desc()).all()
 
@@ -214,6 +333,7 @@ def scoreall():
 
 
 @bp.route('/scoredata/', methods=['POST'])
+@login_required
 def scoredata():
     cur_month = request.form['cur_month']
     cur_menu_id = request.form['cur_menu_id']

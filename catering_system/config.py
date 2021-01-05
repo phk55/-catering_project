@@ -9,6 +9,8 @@ SESSION_REFRESH_EACH_REQUEST = True
 
 DEBUG = True
 
+USER_ID='UID'
+
 # 缓存的ip, 端口， 数据库
 CACHE_TYPE = 'redis'
 CACHE_REDIS_HOST = '127.0.0.1'
@@ -49,4 +51,10 @@ SCORE_DICT = {
 
 SCORE_URL = 'http://127.0.0.1:5000/score/'  # 评分页面网，后接菜品id
 
-START_TIME=datetime.date(2020,1,5)
+START_TIME = datetime.date(2020, 1, 5)
+
+# 互亿短信配置
+ACCOUNT = 'C10530451'
+PWD = '7e1ce8c774836315b443ebfb32052d8f'
+# 注册邀请码
+INVITE = '12345678'

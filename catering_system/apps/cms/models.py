@@ -16,12 +16,12 @@ class CMSUser(db.Model):
     username = db.Column(db.String(20), nullable=False)
     _password = db.Column(db.String(2000), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False)
-    TAG = db.Column(db.String(20), nullable=False)  # 代表这个员工还在不在,0代表离职。1代表在职厨师
+    TAG = db.Column(db.String(20), nullable=False,default=1)  # 代表这个员工还在不在,0代表离职。1代表在职厨师.2代表管理员
     create_time = db.Column(db.DateTime, default=datetime.now)
 
     def __init__(self, username, password, phone_number, TAG):
         self.username = username
-        self._password = password
+        self.password = password
         self.phone_number = phone_number
         self.TAG = TAG
 
