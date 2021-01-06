@@ -16,7 +16,7 @@ class CMSUser(db.Model):
     username = db.Column(db.String(20), nullable=False)
     _password = db.Column(db.String(2000), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False)
-    TAG = db.Column(db.String(20), nullable=False,default=1)  # 代表这个员工还在不在,0代表离职。1代表在职厨师.2代表管理员
+    TAG = db.Column(db.String(20), nullable=False, default=1)  # 代表这个员工还在不在,0代表离职。1代表在职厨师.2代表管理员
     create_time = db.Column(db.DateTime, default=datetime.now)
 
     def __init__(self, username, password, phone_number, TAG):
@@ -43,7 +43,7 @@ class MenuModels(db.Model):
     __tablename__ = 'menu'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     menu_name = db.Column(db.String(20), nullable=False)
-    weighted_value = db.Column(db.Integer, nullable=False)
+    menu_num = db.Column(db.String(3), nullable=False)
     pic_name = db.Column(db.Text)
     ewm_name = db.Column(db.Text)
     sold_out = db.Column(db.Integer, default=0)  # 1.为已下架
@@ -55,9 +55,8 @@ class MenuModels(db.Model):
 class ScoreModel(db.Model):
     __tablename__ = 'score_data'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    score1 = db.Column(db.Integer, nullable=False)
-    score2 = db.Column(db.Integer, nullable=False)
-    score3 = db.Column(db.Integer, nullable=False)
+    score = db.Column(db.Integer, nullable=False)
+    server = db.Column(db.Integer, nullable=False)
     chefs = db.Column(db.Text)
     suggest = db.Column(db.Text)
     create_time = db.Column(db.DateTime, default=datetime.now)
@@ -68,11 +67,35 @@ class ScoreModel(db.Model):
 
     def get_data(self):
         score_data = {
-            'score1': self.score1,
-            'score2': self.score2,
-            'score3': self.score3,
+            'score': self.score,
+            'server': self.server,
             'suggest': self.suggest,
             'create_time': str(self.create_time)
-
         }
         return score_data
+
+
+# class DiningTableModel(db.Model):
+#     __tablename__ = 'dining_table'
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     table_num = db.Column(db.Integer, nullable=False)
+#
+#
+# class ServerScoreModel(db.Model):
+#     __tablename__ = 'server_score'
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     server = db.Column(db.Integer, nullable=False)
+#     suggest = db.Column(db.Text)
+#     create_time = db.Column(db.DateTime, default=datetime.now)
+#
+#     table_num_id = db.Column(db.Integer, db.ForeignKey('dining_table.id'), nullable=False)
+#
+#     dining_tables = db.relationship('DiningTableModel', backref=db.backref('servers', lazy='dynamic'))
+#
+#     def get_data(self):
+#         server_data = {
+#             'server': self.server,
+#             'suggest': self.suggest,
+#             'create_time': str(self.create_time)
+#         }
+#         return server_data

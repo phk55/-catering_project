@@ -49,57 +49,55 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url_for('front.menuall') }}">所有菜品</a></li>
-        <li class="breadcrumb-item active cur-menu" aria-current="page">{{ menu.menu_name }}</li>
+        <li class="breadcrumb-item active cur-menu" aria-current="page">评分</li>
     </ol>
 </nav>
 <div class="container menu-info">
     <div class="placeholder-div"></div>
-    <div class="row menu-div">
-        <div class="col-3"><img style="width: 100%" src="{{ g.qiniu_url }}{{ menu.pic_name }}" alt=""></div>
-        <div class="col-9">
-            <p>{{ menu.describe_info }}</p>
+    {% for menu in menus %}
+        <div class="row menu-div">
+            <div class="col-3"><img style="width: 100%" src="{{ g.qiniu_url }}{{ menu.pic_name }}" alt=""></div>
+            <div class="col-9">
+                <p class="info-p">{{ menu.menu_name }}: {{ menu.describe_info }}</p>
+            </div>
         </div>
-    </div>
+    {% endfor %}
+
 
 </div>
+{% for menu in menus %}
+    <div class="main-div row menu-score-div">
+        <div class="col-1"></div>
+        <div class="title-div col-4">{{ menu.menu_name }}:</div>
+        <div class="myapp-score col-7">
+            <div id="score{{ loop.index }}"></div>
+            <div class="myapp-tip">
+                <span id="tip{{ loop.index }}" class="lq-score-tip"></span>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+
 
 <div class="main-div row">
-    <div class="col-2"></div>
-    <div class="title-div col-1">色：</div>
-    <div class="myapp-score col-9">
-        <div id="score1"></div>
+    <div class="col-1"></div>
+    <div class="title-div col-4">服务:</div>
+    <div class="myapp-score col-7">
+        <div id="score0"></div>
         <div class="myapp-tip">
-            <span id="tip1" class="lq-score-tip"></span>
+            <span id="tip0" class="lq-score-tip"></span>
         </div>
     </div>
 </div>
-<div class="main-div row">
-    <div class="col-2"></div>
-    <div class="title-div col-1">香：</div>
-    <div class="myapp-score col-9">
-        <div id="score2"></div>
-        <div class="myapp-tip">
-            <span id="tip2" class="lq-score-tip"></span>
-        </div>
-    </div>
-</div>
-<div class="main-div row">
-    <div class="col-2"></div>
-    <div class="title-div col-1">味：</div>
-    <div class="myapp-score col-9">
-        <div id="score3"></div>
-        <div class="myapp-tip">
-            <span id="tip3" class="lq-score-tip"></span>
-        </div>
-    </div>
-</div>
+
 <div class="suggest-div row">
-    <div class="col-2"></div>
-    <div class="col-10">
-        <textarea name="" id="suggest-text"  rows="3" placeholder="建议或其他（选填）"></textarea>
+    <div class="col-3"></div>
+    <div class="col-9">
+        <textarea name="" id="suggest-text" rows="3" placeholder="建议或其他（选填）"></textarea>
     </div>
-
 </div>
+<input style="display: none" id="ids" type="text" value="{{ ids }}">
 
 <div class="row btn-div">
     <div class="col-2"></div>

@@ -45,8 +45,17 @@
     height: 50%;
     border-right: #aaaaaa 3px solid;
 }
+.min-data-div2 {
+    margin-top: 1em;
+    height: 50%;
+    border-left: #aaaaaa 3px solid;
+}
 
 .main-score-data table {
+    width: 95%;
+    margin: 2em;
+}
+.server-suggest-div table {
     width: 95%;
     margin: 2em;
 }
@@ -66,6 +75,10 @@
     height: 150px;
     text-align: center;
     font-size: 13px;
+}
+
+.server-suggest-div{
+    height: 400px;
 }
 
 .chef-title {

@@ -1,0 +1,32 @@
+{% from "common/_macros.html" import static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% include "common/_head.html" %}
+
+    <script src="{{ static('front/js/place_order.js') }}"></script>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-6"></div>
+
+    <div class="col-md-5">
+        <div id="demo">
+            <form action="">
+                <input class="menu-num" type="text" maxlength="3">
+                <input class="menu-num" type="text" maxlength="3">
+                <input class="menu-num" type="text" maxlength="3">
+                <input class="menu-num" type="text" maxlength="3">
+                <input class="menu-num" type="text" maxlength="3">
+                <input class="menu-num" type="text" maxlength="3">
+            </form>
+        </div>
+        <div>
+            <button class="btn btn-primary btn-block" id="print-btn" >打印二维码</button>
+        </div>
+    </div>
+
+</body>
+</html>

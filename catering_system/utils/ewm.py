@@ -58,3 +58,31 @@ def qr_with_central_img(link, central_picture, output_file):
     img_b = img_byte.getvalue()
     upload_qiniu2(img_b, output_file)
     return output_file
+
+
+def qr_single_code(link="http://192.168.1.10:8080", outputput_file="output_code_simple.png"):
+    #简单的二维码
+    # 生成二维码实例，设置大小和边框
+    qr = qrcode.QRCode(box_size=10, border=2)
+    # 添加二维码的显示信息
+    content = link
+    qr.add_data(content)
+    qr.make(fit=True)
+    img = qr.make_image()
+    # 保存二维码
+    img.save(outputput_file)
+    # img.show()
+
+
+if __name__ == '__main__':
+
+    #
+    # # link: url
+    # # central_picture: central picture filename
+    # # outputput_file: output filename
+    # qr_with_central_img(link="https://stackoverflow.com", central_picture="BackgroundIMG.png",
+    #                     outputput_file="output_code_with_central_png.png")
+
+    # link: url
+    # outputput_file: output filename
+    qr_single_code(link="https://github.com/", outputput_file="output_code_simple.png")

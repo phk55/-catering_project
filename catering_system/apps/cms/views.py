@@ -142,7 +142,7 @@ def mesyzcode():
 @bp.route('/menulist/')
 @login_required
 def menulist():
-    menus = MenuModels.query.order_by(MenuModels.weighted_value.desc()).all()
+    menus = MenuModels.query.order_by(MenuModels.menu_num).all()
     context = {
         'menus': menus
     }
@@ -153,45 +153,48 @@ def menulist():
 @login_required
 def addmenulist():
     menu_name = request.form['menu_name']
-    weighted_value = request.form['weighted_value']
+    menu_num = request.form['weighted_value']
     describe_info = request.form['describe_info']
     pic_file = request.files['pic_file']
-    if not menu_name or not weighted_value or not pic_file.filename:
-        return restful.params_error(message='请确认是否填写菜品名称;权重;以及已上传图片！')
+    if not menu_name or not menu_num or not pic_file.filename:
+        return restful.params_error(message='请确认是否填写菜品名称;编号;以及已上传图片！')
     try:
-        weighted_value = int(weighted_value)
-        if 0 < weighted_value <= 100:
+        menu_num = str(menu_num)
+        if len(menu_num) == 3:
             pass
         else:
             raise Exception
     except:
-        return restful.params_error(message='请确保输入的权重为0-100的数字！')
+        return restful.params_error(message='请确保输入的编号为3位数！')
     new_menu = MenuModels.query.filter_by(menu_name=menu_name).first()
+    new_menu2 = MenuModels.query.filter_by(menu_num=menu_num).first()
     if new_menu:
         return restful.params_error('您输入的菜品已存在系统中！')
+    if new_menu2:
+        return restful.params_error('您输入的编号已存在系统中！')
 
     pic_name = str(datetime.datetime.now().strftime('%Y%m%d%H%M%S')) + '_' + pic_file.filename
     t1 = threading.Thread(target=qiniuupload.upload_qiniu, args=(pic_file, pic_name))
     t1.start()
 
-    new_menu = MenuModels(menu_name=menu_name, weighted_value=int(weighted_value), describe_info=describe_info,
+    new_menu = MenuModels(menu_name=menu_name, menu_num=menu_num, describe_info=describe_info,
                           pic_name=pic_name)
 
     db.session.add(new_menu)
     db.session.commit()
-    t2 = threading.Thread(target=ewm.qr_with_central_img,
-                          args=(config.SCORE_URL + str(new_menu.id), config.UEDITOR_QINIU_DOMAIN + pic_name,
-                                'ewm_' + str(new_menu.id) + '.png'))
-    t2.start()
-    t2.join()
+    # t2 = threading.Thread(target=ewm.qr_with_central_img,
+    #                       args=(config.SCORE_URL + str(new_menu.id), config.UEDITOR_QINIU_DOMAIN + pic_name,
+    #                             'ewm_' + str(new_menu.id) + '.png'))
+    # t2.start()
+    # t2.join()
+    # #
+    # # ewm_filename = ewm.qr_with_central_img(link=config.SCORE_URL + str(new_menu.id),
+    # #                                        central_picture=config.UEDITOR_QINIU_DOMAIN + pic_name,
+    # #                                        output_file='ewm_' + str(new_menu.id) + '.png')
+    # new_menu.ewm_name = 'ewm_' + str(new_menu.id) + '.png'
     #
-    # ewm_filename = ewm.qr_with_central_img(link=config.SCORE_URL + str(new_menu.id),
-    #                                        central_picture=config.UEDITOR_QINIU_DOMAIN + pic_name,
-    #                                        output_file='ewm_' + str(new_menu.id) + '.png')
-    new_menu.ewm_name = 'ewm_' + str(new_menu.id) + '.png'
-
-    db.session.add(new_menu)
-    db.session.commit()
+    # db.session.add(new_menu)
+    # db.session.commit()
 
     return restful.success()
 
@@ -200,7 +203,7 @@ def addmenulist():
 @login_required
 def editmenu():
     menu_name = request.form['menu_name']
-    weighted_value = request.form['weighted_value']
+    menu_num = request.form['weighted_value']
     describe_info = request.form['describe_info']
     pic_file = request.files['pic_file']
     sold_out = request.form.getlist('sold-out')
@@ -213,22 +216,22 @@ def editmenu():
     new_menu = MenuModels.query.filter_by(menu_name=menu_name).first()
     if new_menu and new_menu != menu:
         return restful.params_error('您输入的菜品已存在系统中！')
-    if not menu_name or not weighted_value:
+    if not menu_name or not menu_num:
         return restful.params_error(message='请确认是否填写菜品名称;权重;以及已上传图片！')
     try:
-        weighted_value = int(weighted_value)
-        if 0 < weighted_value <= 100:
+        menu_num = str(menu_num)
+        if len(menu_num) == 3:
             pass
         else:
             raise Exception
     except:
-        return restful.params_error(message='请确保输入的权重为0-100的数字！')
+        return restful.params_error(message='请确保输入的编号为3位数！')
     if pic_file:
         pic_name = str(datetime.datetime.now().strftime('%Y%m%d%H%M%S')) + '_' + pic_file.filename
         t1 = threading.Thread(target=qiniuupload.upload_qiniu, args=(pic_file, pic_name))
         t1.start()
     menu.menu_name = menu_name
-    menu.weighted_value = int(weighted_value)
+    menu.menu_num = menu_num
     menu.describe_info = describe_info
     if pic_file:
         pic_name = str(datetime.datetime.now().strftime('%Y%m%d%H%M%S')) + '_' + pic_file.filename
@@ -241,17 +244,17 @@ def editmenu():
 
     db.session.add(menu)
     db.session.commit()
-    if pic_file:
-        pic_new_name = 'ewm_' + str(uuid.uuid4()) + '.png'
-        t2 = threading.Thread(target=ewm.qr_with_central_img,
-                              args=(config.SCORE_URL + str(menu.id), config.UEDITOR_QINIU_DOMAIN + pic_name,
-                                    pic_new_name))
-        t2.start()
-        t2.join()
-        menu.ewm_name = pic_new_name
-
-        db.session.add(menu)
-        db.session.commit()
+    # if pic_file:
+    #     pic_new_name = 'ewm_' + str(uuid.uuid4()) + '.png'
+    #     t2 = threading.Thread(target=ewm.qr_with_central_img,
+    #                           args=(config.SCORE_URL + str(menu.id), config.UEDITOR_QINIU_DOMAIN + pic_name,
+    #                                 pic_new_name))
+    #     t2.start()
+    #     t2.join()
+    #     menu.ewm_name = pic_new_name
+    #
+    #     db.session.add(menu)
+    #     db.session.commit()
 
     return restful.success()
 
@@ -260,7 +263,7 @@ def editmenu():
 @login_required
 def chef():
     if request.method == 'GET':
-        menus = MenuModels.query.order_by(MenuModels.weighted_value.desc()).all()
+        menus = MenuModels.query.order_by(MenuModels.menu_num).all()
         chefs = CMSUser.query.filter_by(TAG=1).all()
 
         context = {
@@ -320,7 +323,7 @@ def delchef():
 @bp.route('/scoreall/')
 @login_required
 def scoreall():
-    menus = MenuModels.query.order_by(MenuModels.weighted_value.desc()).all()
+    menus = MenuModels.query.order_by(MenuModels.menu_num).all()
 
     month_list = get_month_range(config.START_TIME, datetime.datetime.now())
 
@@ -357,10 +360,12 @@ def scoredata():
 
     # 分数分布统计
     count = [0] * 5
+    # print(count)
     for i in scores:
-        count[i.score1 - 1] += 1
-        count[i.score2 - 1] += 1
-        count[i.score3 - 1] += 1
+        # print(i.score)
+        count[i.score - 1] += 1
+        # count[i.score2 - 1] += 1
+        # count[i.score3 - 1] += 1
 
     score_count = []
     for i in range(0, 5):

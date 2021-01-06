@@ -23,7 +23,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">权重</span>
                         </div>
-                        <input name="weighted_value" type="text" class="form-control" placeholder="0-100,数值越大，显示越靠前"
+                        <input name="weighted_value" type="text" class="form-control" placeholder="3位数编号,数值越小，显示越靠前"
                                aria-label="Username"
                                aria-describedby="basic-addon1">
                     </div>
@@ -45,12 +45,12 @@
                                   rows="5"></textarea>
                     </div>
                     <div class="form-check form-check-inline hid-css" id="sold-div">
-                        <input class="form-check-input" name="sold-out" type="checkbox" id="sold-out" >
+                        <input class="form-check-input" name="sold-out" type="checkbox" id="sold-out">
                         <label class="form-check-label" for="sold-out" id="sold-label">下架</label>
                     </div>
                     <input style="display: none" type="text" name="old-menu">
                     <button class="btn btn-warning btn-block submit-btn hid-css" id="sub-btn">提交</button>
-                    <button class="btn btn-warning btn-block edit-submit-btn hid-css"id="edit-btn">提交修改</button>
+                    <button class="btn btn-warning btn-block edit-submit-btn hid-css" id="edit-btn">提交修改</button>
                 </form>
             </div>
 
@@ -59,12 +59,11 @@
             <table class="table">
                 <thead class="table-dark">
                 <tr>
-                    <th>序号</th>
+                    <th>编号</th>
                     <th>图片</th>
                     <th>菜名</th>
                     <th>简介</th>
-                    <th>权重</th>
-                    <th>二维码</th>
+{#                    <th>二维码</th>#}
                     <th>状态</th>
                     <th>编辑</th>
                 </tr>
@@ -72,12 +71,12 @@
                 <tbody class="table-light">
                 {% for menu in menus %}
                     <tr data-menu-id="{{ menu.id }}">
-                        <td>{{ loop.index }}</td>
+                        <td id="weighted-{{ menu.id }}">{{ menu.menu_num }}</td>
                         <td><img style="width: 5em" src="{{ g.qiniu_url }}{{ menu.pic_name }}" alt=""></td>
                         <td id="menu-name-{{ menu.id }}">{{ menu.menu_name }}</td>
                         <td id="desc-{{ menu.id }}">{{ menu.describe_info }}</td>
-                        <td id="weighted-{{ menu.id }}">{{ menu.weighted_value }}</td>
-                        <td><img style="width: 4em" src="{{ g.qiniu_url }}{{ menu.ewm_name }}" alt=""></td>
+
+{#                        <td><img style="width: 4em" src="{{ g.qiniu_url }}{{ menu.ewm_name }}" alt=""></td>#}
 
                         {% if menu.sold_out==1 %}
                             <td id="sold-{{ menu.id }}">已下架</td>

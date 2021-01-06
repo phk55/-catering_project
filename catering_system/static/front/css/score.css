@@ -49,6 +49,9 @@
     /*margin-top: 0!important;*/
     vertical-align: top;
     padding-top: 0.1em;
+    padding-right: 0!important;
+    text-align: right;
+    margin-right: 0!important;
     /*margin-left: 2em;*/
 
 }
@@ -68,4 +71,7 @@
 }
 .suggest-div{
     /*margin-left: 2em;*/
+}
+.info-p{
+    font-size: 13px;
 }

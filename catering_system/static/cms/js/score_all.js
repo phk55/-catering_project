@@ -43,21 +43,21 @@ function get_data(month_lis, menu_lis, cur_month, cur_menu_id) {
                         var td1 = document.createElement('td')
                         td1.innerText = i + 1
                         var td2 = document.createElement('td')
-                        td2.innerText = score_data[i]['score1']
-                        var td3 = document.createElement('td')
-                        td3.innerText = score_data[i]['score2']
-                        var td4 = document.createElement('td')
-                        td4.innerText = score_data[i]['score3']
-                        var td5 = document.createElement('td')
-                        td5.innerText = score_data[i]['suggest']
+                        td2.innerText = score_data[i]['score']
+                        // var td3 = document.createElement('td')
+                        // td3.innerText = score_data[i]['server']
+                        // var td4 = document.createElement('td')
+                        // td4.innerText = score_data[i]['score3']
+                        // var td5 = document.createElement('td')
+                        // td5.innerText = score_data[i]['suggest']
 
                         var td6 = document.createElement('td')
                         td6.innerText = score_data[i]['create_time']
                         tr.appendChild(td1)
                         tr.appendChild(td2)
-                        tr.appendChild(td3)
-                        tr.appendChild(td4)
-                        tr.appendChild(td5)
+                        // tr.appendChild(td3)
+                        // tr.appendChild(td4)
+                        // tr.appendChild(td5)
                         tr.appendChild(td6)
                         tb.appendChild(tr)
                     }
