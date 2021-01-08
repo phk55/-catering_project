@@ -31,7 +31,7 @@
                     <div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="menu-title">菜名</div>
                     <div class="main-score-data table-responsive">
                         <table class="table table-hover mb-0" id="score_table">
@@ -50,7 +50,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-md-4 min-data-div2">
+                <div class="col-md-5 min-data-div2">
                     <div>
                         <div class="server-suggest-div" id="server-suggest_div">
                             <div class="chef-title">服务及建议</div>
@@ -58,22 +58,46 @@
                                 <table class="table table-hover mb-0" id="server">
                                     <thead>
                                     <tr>
-                                        <th class="th1">序号</th>
-                                        <th class="th1">服务评分</th>
-                                        {#                                <th class="th1">服务评分</th>#}
-                                        {#                                <th class="th1">味</th>#}
-                                        <th class="th2">建议</th>
-                                        <th class="th3">时间</th>
+                                        <th style="width: 12%">序号</th>
+                                        {#                                        <th class="th1">餐桌号</th>#}
+                                        <th style="width: 12%">评分</th>
+                                        <th style="width: 46%">建议</th>
+                                        <th style="width: 30%">时间</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="tb">
+                                    <tbody id="server_tb">
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
                         <div class="echart-div">
-                            <div id="table-num" style="height: 100%"></div>
+                            <div class="row" id="table-num" style="height: 100%">
+                                <div class="col-md-6">
+
+                                    <div style="height: 100%" id="server-echarts"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="table-title">餐桌号</div>
+                                    <div class="table-num-div">
+                                        <ul class="table-num-ul">
+                                            <li class="table-num-item table-num-active"
+                                                value="0">全部
+                                            </li>
+                                            {% for table_num in table_nums %}
+                                                <li class="table-num-item"
+                                                    value="{{ table_num.id }}">{{ table_num.table_num }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        {#                                        <button class="btn active" value="0">全部</button>#}
+                                        {##}
+                                        {#                                        {% for table_num in table_nums %}#}
+                                        {#                                            <button class="btn"#}
+                                        {#                                                    value="{{ table_num.id }}">{{ table_num.table_num }}</button>#}
+                                        {#                                        {% endfor %}#}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div>

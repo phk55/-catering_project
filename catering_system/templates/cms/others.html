@@ -1,0 +1,32 @@
+{% extends 'cms/cms_base.html' %}
+{% block title %}
+    其他
+{% endblock %}
+{% block head %}
+
+{% endblock %}
+{% block main_content %}
+
+    <div class="row">
+        <div class="col-md-2">
+            <div>餐桌号管理</div>
+            <form action="">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="输入餐桌号" name="table-num"
+                           aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit" id="add-dining-table-btn">+添加</button>
+                    </div>
+                </div>
+            </form>
+            <div>
+                {% for table_num in table_nums %}
+                    <span>{{ table_num.table_num }}</span>
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

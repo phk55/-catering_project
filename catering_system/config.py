@@ -51,7 +51,7 @@ SCORE_DICT = {
 
 SCORE_URL = 'http://127.0.0.1:5000/score/'  # 评分页面网，后接菜品id
 
-START_TIME = datetime.date(2020, 1, 5)
+START_TIME = datetime.date(2020, 8, 5)
 
 # 互亿短信配置
 ACCOUNT = 'C10530451'

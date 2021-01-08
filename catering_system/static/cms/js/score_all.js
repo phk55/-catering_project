@@ -1,4 +1,4 @@
-function get_data(month_lis, menu_lis, cur_month, cur_menu_id) {
+function get_data(month_lis, menu_lis, table_num_lis, cur_month, cur_menu_id, table_num_id) {
     if (cur_menu_id === 0) {
         for (i = 0; i < menu_lis.length; i++) {
             if (menu_lis[i].classList.contains('active') === true) {
@@ -14,13 +14,22 @@ function get_data(month_lis, menu_lis, cur_month, cur_menu_id) {
             }
         }
     }
+    if (table_num_id === -1) {
+        for (i = 0; i < table_num_lis.length; i++) {
+            if (table_num_lis[i].classList.contains('table-num-active') === true) {
+                table_num_id = table_num_lis[i].value
+
+            }
+        }
+    }
     // console.log(cur_month, 'month')
-    // console.log(cur_menu_id, 'menu')
+    // console.log(table_num_id, 'menu')
     myajax.post({
         'url': '/cms/scoredata/',
         'data': {
             'cur_month': cur_month,
-            'cur_menu_id': cur_menu_id
+            'cur_menu_id': cur_menu_id,
+            'table_num_id': table_num_id
         },
         'success': function (data) {
             if (data['code'] === 200) {
@@ -292,10 +301,119 @@ function get_data(month_lis, menu_lis, cur_month, cur_menu_id) {
                     }
                 }
 
+                function servertable(data) {
+                    var score_data = data['data']['server_data']
+
+
+                    // console.log(data['data'])
+                    // console.log(Object.keys(score_data))
+                    var table = document.getElementById('server')
+                    var old_tb = document.getElementById('server_tb')
+                    old_tb.remove()
+                    var tb = document.createElement('tbody')
+                    tb.id = 'server_tb'
+                    table.appendChild(tb)
+
+                    var score_data_keys = Object.keys(score_data)
+                    for (var i = 0; i < score_data_keys.length; i++) {
+                        var tr = document.createElement('tr')
+                        var td1 = document.createElement('td')
+                        td1.innerText = i + 1
+                        // var td2 = document.createElement('td')
+                        // td2.innerText = score_data[i]['table_num']
+                        var td3 = document.createElement('td')
+                        td3.innerText = score_data[i]['server']
+                        var td4 = document.createElement('td')
+                        td4.innerText = score_data[i]['suggest']
+
+                        var td5 = document.createElement('td')
+                        td5.innerText = score_data[i]['create_time']
+                        tr.appendChild(td1)
+                        // tr.appendChild(td2)
+                        tr.appendChild(td3)
+                        tr.appendChild(td4)
+                        tr.appendChild(td5)
+                        // tr.appendChild(td6)
+                        tb.appendChild(tr)
+                    }
+                }
+
+                function serverpie(data) {
+
+                    var dom = document.getElementById("server-echarts");
+                    var myChart = echarts.init(dom);
+                    var app = {};
+                    option = null;
+                    option = {
+                        title: {
+                            text: '服务评分分布图',
+
+                            left: 'center',
+                            top: '2%',
+                            textStyle: {
+                                fontSize: 13,
+                                color: "rgb(137,137,137)"
+                            },
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a}<br/>{b}分 : {c} ({d}%)',
+
+                        },
+                        legend: {
+                            left: 'left',
+                            orient: 'vertical',
+                            top: '20%',
+                            data: ['1', '2', '3', '4', '5'],
+                            icon: "circle"
+                        },
+                        toolbox: {
+                            show: true,
+                            // feature: {
+                            //     mark: {show: true},
+                            //     dataView: {show: true, readOnly: false},
+                            //     magicType: {
+                            //         show: true,
+                            //         type: ['pie', 'funnel']
+                            //     },
+                            //     restore: {show: true},
+                            //     saveAsImage: {show: true}
+                            // }
+                        },
+                        series: [
+                            {
+                                name: '评分',
+                                type: 'pie',
+                                radius: [20, 65],
+                                center: ['65%', '50%'],
+                                roseType: 'radius',
+                                label: {
+                                    show: false
+                                },
+                                // data: [
+                                //     {value: 10, name: '1'},
+                                //     {value: 5, name: '2'},
+                                //     {value: 15, name: '3'},
+                                //     {value: 25, name: '4'},
+                                //     {value: 20, name: '5'},
+                                //
+                                // ]
+                                data: data['data']['server_count']
+                            }
+                        ]
+                    };
+                    ;
+                    if (option && typeof option === "object") {
+                        myChart.setOption(option, true);
+                    }
+                }
+
 
                 scoretable(data)
                 scorepie(data)
                 scoreline(data)
+                servertable(data)
+                serverpie(data)
 
             } else {
                 myalert.alertInfo('信息有误！')
@@ -312,8 +430,9 @@ $(function () {
 
     var month_lis = document.getElementsByClassName('month-li')
     var menu_lis = document.getElementsByClassName('menu-li')
+    var table_num_lis = document.getElementsByClassName('table-num-item')
 
-
+    console.log(table_num_lis)
     for (i = 0; i < month_lis.length; i++) {
         if (month_lis[i].classList.contains('active') === true) {
             var cur_month = month_lis[i].innerHTML
@@ -325,7 +444,14 @@ $(function () {
 
         }
     }
-    get_data(month_lis, menu_lis, cur_month, cur_menu_id)
+    for (i = 0; i < table_num_lis.length; i++) {
+        if (table_num_lis[i].classList.contains('table-num-active') === true) {
+            var table_num_id = table_num_lis[i].value
+
+        }
+    }
+    console.log(table_num_id)
+    get_data(month_lis, menu_lis, table_num_lis, cur_month, cur_menu_id, table_num_id)
 
     for (i = 0; i < month_lis.length; i++) {
         month_lis[i].onclick = function () {
@@ -336,7 +462,7 @@ $(function () {
             }
             this.classList.add('active')
             var cur_month = this.innerHTML
-            get_data(month_lis, menu_lis, cur_month, 0)
+            get_data(month_lis, menu_lis, table_num_lis, cur_month, 0, -1)
         }
     }
 
@@ -350,7 +476,20 @@ $(function () {
             }
             this.classList.add('active')
             var cur_menu_id = this.value
-            get_data(month_lis, menu_lis, 0, cur_menu_id)
+            get_data(month_lis, menu_lis, table_num_lis, 0, cur_menu_id, -1)
+        }
+    }
+    for (i = 0; i < table_num_lis.length; i++) {
+        // console.log(table_num_lis[i])
+        table_num_lis[i].onclick = function () {
+            for (i = 0; i < table_num_lis.length; i++) {
+                if (table_num_lis[i].classList.contains('table-num-active') === true) {
+                    table_num_lis[i].classList.remove('table-num-active')
+                }
+            }
+            this.classList.add('table-num-active')
+            var table_num_id = this.value
+            get_data(month_lis, menu_lis, table_num_lis, 0, 0, table_num_id)
         }
     }
 

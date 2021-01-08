@@ -12,7 +12,7 @@ from flask import Blueprint, render_template, request, json, jsonify, views, ses
 from sqlalchemy import and_
 from exit import redis_db, db
 from utils import restful, qiniuupload, ewm
-from .models import MenuModels, CMSUser, ScoreModel
+from .models import MenuModels, CMSUser, ScoreModel, DiningTableModel, ServerScoreModel
 from ..common_func.month_rane import get_month_range
 from ..common_func.pd_read import pd_read_sql
 from ..common_func.hyYz import SMS
@@ -327,10 +327,13 @@ def scoreall():
 
     month_list = get_month_range(config.START_TIME, datetime.datetime.now())
 
+    table_nums = DiningTableModel.query.all()
+
     month_list.reverse()
     context = {
         'menus': menus,
-        'month_list': month_list
+        'month_list': month_list,
+        'table_nums': table_nums
     }
     return render_template('cms/score_all.html', **context)
 
@@ -340,6 +343,8 @@ def scoreall():
 def scoredata():
     cur_month = request.form['cur_month']
     cur_menu_id = request.form['cur_menu_id']
+    table_num_id = request.form['table_num_id']
+
     cur_month = cur_month.split('. ')[1]
     cur_menu = MenuModels.query.get(cur_menu_id)
 
@@ -350,6 +355,17 @@ def scoredata():
     scores = cur_menu.menu_score.filter(ScoreModel.create_time.between(start_time, end_time)).order_by(
         ScoreModel.create_time.desc()).all()
 
+    servers = ServerScoreModel.query.filter(ServerScoreModel.create_time.between(start_time, end_time)).order_by(
+        ServerScoreModel.create_time.desc()).all()
+    if int(table_num_id) != 0:
+        servers = [i for i in servers if int(i.table_num_id) == int(table_num_id)]
+
+    # print(servers)
+    server_dict = {}
+    for i in range(0, len(servers)):
+        # print(servers[i].get_data())
+        server_dict[str(i)] = servers[i].get_data()
+
     t = {}
     for i in range(0, len(scores)):
         t[str(i)] = scores[i].get_data()
@@ -358,7 +374,7 @@ def scoredata():
     chef_user = [i.username for i in chefs]
     chef_user = list(set(chef_user))
 
-    # 分数分布统计
+    # 菜品分数分布统计
     count = [0] * 5
     # print(count)
     for i in scores:
@@ -371,6 +387,15 @@ def scoredata():
     for i in range(0, 5):
         tem_dict = {'value': count[i], 'name': str(i + 1)}
         score_count.append(tem_dict)
+
+    # 服务分数分布统计
+    s_count = [0] * 5
+    for i in servers:
+        s_count[i.server - 1] += 1
+    server_count = []
+    for i in range(0, 5):
+        tem_dict = {'value': s_count[i], 'name': str(i + 1)}
+        server_count.append(tem_dict)
 
         # 开始计数每天
     now_time = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -418,10 +443,121 @@ def scoredata():
         count_num = list(day_dict.values())
 
     tem_dict = {'score_data': t, 'chef_name': chef_data, 'score_count': score_count, 'days': days,
-                'count_num': count_num}
+                'count_num': count_num, 'server_data': server_dict, 'server_count': server_count}
     data = {
         'code': 200,
         'data': tem_dict,
         'message': ''
     }
     return jsonify(data)
+
+
+@bp.route('/chefscoreall/')
+@login_required
+def chefscoreall():
+    chefs = CMSUser.query.filter(CMSUser.TAG != 2).order_by(CMSUser.TAG.desc()).all()
+
+    context = {
+        'chefs': chefs,
+
+    }
+    return render_template('cms/chef_score_all.html', **context)
+
+
+@bp.route('/chefscoredata/', methods=['POST'])
+@login_required
+def chefscoredata():
+    cur_chef = request.form['cur_chef']
+    chef_name = cur_chef.split('.')[1]
+    chef_name = chef_name.strip()
+    scores = ScoreModel.query.filter(ScoreModel.chefs.contains(chef_name)).order_by(ScoreModel.create_time).all()
+    month_list = get_month_range(config.START_TIME, datetime.datetime.now())
+    month_list2 = []
+    for i in month_list:
+        tem_list = i.split('-')
+        if len(tem_list[1]) == 1:
+            tem_list[1] = '0' + tem_list[1]
+        month = '-'.join(tem_list)
+        month_list2.append(month)
+    # month_list2.append('date')
+    month_list2.insert(0, 'date')
+
+    def score_month():
+        score1 = [0] * (len(month_list))
+        score2 = [0] * (len(month_list))
+        score3 = [0] * (len(month_list))
+        score4 = [0] * (len(month_list))
+        score5 = [0] * (len(month_list))
+        score1.insert(0, '1分')
+        score2.insert(0, '2分')
+        score3.insert(0, '3分')
+        score4.insert(0, '4分')
+        score5.insert(0, '5分')
+        score_dict = {'date': month_list2, '1': score1, '2': score2, '3': score3, '4': score4, '5': score5, }
+        for score in scores:
+            index_num = month_list2.index(score.create_time.strftime('%Y-%m'))
+            score_dict[str(score.score)][index_num] += 1
+        month_score_data = list(score_dict.values())
+
+        return month_score_data
+
+    def menu_month():
+
+        menu_dict = {'date': month_list2}
+        for score in scores:
+            menu = score.score_menu.menu_name
+            if not menu_dict.get(menu):
+                tem_lis = [0] * (len(month_list))
+                tem_lis.insert(0, menu)
+                menu_dict[menu] = tem_lis
+
+        # for menu in menus:
+        #     if not menu_dict.get(menu):
+        #         tem_lis = [0] * (len(month_list))
+        #         tem_lis.insert(0, menu)
+        #
+        #         menu_dict[menu] = tem_lis
+        # print(menu_dict)
+
+        # score_dict = {'date': month_list2, '': score1, '2': score2, '3': score3, '4': score4, '5': score5, }
+        key_lis = []
+        for score in scores:
+            index_num = month_list2.index(score.create_time.strftime('%Y-%m'))
+            menu_dict[score.score_menu.menu_name][index_num] += 1
+            key_lis.append(score.score_menu.menu_name)
+        menu_month_data = list(menu_dict.values())
+        return menu_month_data
+
+    month_score_data = score_month()
+    month_menu_data = menu_month()
+    # print(month_menu_data)
+    data = {
+        'code': 200,
+        'data': {'month_score_data': month_score_data, 'month_menu_data': month_menu_data, 'end_date': month_list2[-1]},
+        'message': ''
+    }
+    return jsonify(data)
+
+
+@bp.route('/others/')
+@login_required
+def others():
+    table_num = request.args.get('table-num')
+    if table_num:
+        old_table = DiningTableModel.query.filter_by(table_num=table_num).first()
+        if not old_table:
+            table = DiningTableModel(table_num=table_num)
+            db.session.add(table)
+            db.session.commit()
+
+    table_nums = DiningTableModel.query.order_by(DiningTableModel.table_num).all()
+    context = {
+        'table_nums': table_nums
+    }
+    return render_template('cms/others.html', **context)
+
+#
+# @bp.route('/addtable/')
+# def addtable():
+#     table_num = request.args.get('table-num')
+#     print(table_num)
