@@ -1,0 +1,110 @@
+{% from "common/_macros.html" import static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {#    <link rel="stylesheet" href="css/lq-score.css">#}
+    {#    <link rel="stylesheet" href="css/demo.css">#}
+    <link rel="shortcut icon" type="image/x-icon" href="../../static/cms/Frest/app-assets/images/ico/favicon.ico">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ static('front/start_score/css/lq-score.css') }}">
+    <link rel="stylesheet" href="{{ static('front/start_score/css/demo.css') }}">
+    <script src="{{ static('front/start_score/js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ static('front/start_score/js/lq-score.min.js') }}"></script>
+    <script src="{{ static('front/js/score.js') }}"></script>
+
+    <link rel="stylesheet" href="{{ static('front/css/score.css') }}">
+
+    <script src="{{ url_for('static',filename="common/myajax.js") }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename="common/sweetalert/sweetalert.css") }}">
+    <script src="{{ url_for('static',filename="common/sweetalert/sweetalert.min.js") }}"></script>
+    <script src="{{ url_for('static',filename="common/sweetalert/myalert.js") }}"></script>
+
+    {#    <script src="js/lq-score.min.js"></script>#}
+    <title>评分</title>
+    {#    <script>#}
+    {#        /*#}
+    {#        属性参数介绍：#}
+    {#            $tipEle--------提示元素，请传入jquery对象#}
+    {#            fontSize-------大小，字符串类型#}
+    {#            isReScore------是否允许重新评分#}
+    {#            tips-----------提示，可以是default默认消息，可以传模板字符串，也可以传长度为5的数组#}
+    {#            zeroTip--------无分数提示，字符串类型#}
+    {#            score----------分数，小数、整数都可以#}
+    {#            callBack-------评分回调，会返回分数和插件元素李，例：function(score,ele){}#}
+    {#            content--------内容#}
+    {#            defultColor----默认颜色(未选中的颜色)#}
+    {#            selectColor----选中后的颜色，可以传单个字符串，也可以传长度为5的数组#}
+    {#        */#}
+
+    {#    </script>#}
+
+</head>
+<body>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('front.menuall') }}">所有菜品</a></li>
+        <li class="breadcrumb-item active cur-menu" aria-current="page">评分</li>
+    </ol>
+</nav>
+<div class="container menu-info">
+    <div class="placeholder-div"></div>
+    {% for menu in menus %}
+        <div class="row menu-div">
+            <div class="col-3"><img style="width: 100%" src="{{ g.qiniu_url }}{{ menu.pic_name }}" alt=""></div>
+            <div class="col-9">
+                <p class="info-p">{{ menu.menu_name }}: {{ menu.describe_info }}</p>
+            </div>
+        </div>
+    {% endfor %}
+
+
+</div>
+{% for menu in menus %}
+    <div class="main-div row menu-score-div">
+        <div class="col-1"></div>
+        <div class="title-div col-4">{{ menu.menu_name }}:</div>
+        <div class="myapp-score col-7">
+            <div id="score{{ loop.index }}"></div>
+            <div class="myapp-tip">
+                <span id="tip{{ loop.index }}" class="lq-score-tip"></span>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+
+
+<div class="main-div row">
+    <div class="col-1"></div>
+    <div class="title-div col-4">服务:</div>
+    <div class="myapp-score col-7">
+        <div id="score0"></div>
+        <div class="myapp-tip">
+            <span id="tip0" class="lq-score-tip"></span>
+        </div>
+    </div>
+</div>
+
+<div class="suggest-div row">
+    <div class="col-3"></div>
+    <div class="col-9">
+        <textarea name="" id="suggest-text" rows="3" placeholder="建议或其他（选填）"></textarea>
+    </div>
+</div>
+<input style="display: none" id="ids" type="text" value="{{ ids }}">
+
+<div class="row btn-div">
+    <div class="col-2"></div>
+    <button class="btn btn-warning btn-block col-8 submit-btn">发布</button>
+    <div class="col-2"></div>
+</div>
+
+
+</body>
+</html>

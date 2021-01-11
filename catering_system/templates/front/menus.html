@@ -1,0 +1,35 @@
+{% from "common/_macros.html" import static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    {#    {% include "common/_head.html" %}#}
+    <title>菜品介绍</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../../static/cms/Frest/app-assets/images/ico/favicon.ico">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ static('front/css/menus.css') }}">
+
+</head>
+<body>
+<div class="container nav-back">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">菜单列表</div>
+        <div class="col-2"></div>
+    </div>
+</div>
+<div class="container">
+<div class="placeholder-div"></div>
+    {% for menu in menus %}
+        <div class="row menu-div">
+            <div class="col-3"><img style="width: 100%" src="{{ g.qiniu_url }}{{ menu.pic_name }}" alt=""></div>
+            <div class="col-9">
+                <p>{{ menu.menu_name }}: <small>{{ menu.describe_info }}</small></p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+</body>
+</html>

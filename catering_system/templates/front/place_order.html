@@ -1,0 +1,118 @@
+{% from "common/_macros.html" import static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description"
+          content="Frest admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
+    <meta name="keywords"
+          content="admin template, Frest admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="author" content="PIXINVENT">
+    <title>评分二维码打印</title>
+    {% include "common/_head.html" %}
+    <link rel="stylesheet" href="{{ static('front/css/place_order.css') }}">
+    <script src="{{ static('front/js/place_order.js') }}"></script>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-5 main-div">
+        <div class="table-div">
+            <div class="table-title">餐桌号</div>
+            <div class="row table-num-div">
+                {% for table in tables %}
+                    <div class="col-md-1">{{ table.table_num }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="table-div menu-div">
+            <div class="table-title">菜单</div>
+            <div class="row menu-detail-div">
+
+                <ul class="col-md-3">
+                    {% for menu in menus %}
+                        {% if menu.menu_num|int<21 %}
+                            <li>{{ menu.menu_num }}. {{ menu.menu_name }}</li>
+
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <ul class="col-md-3">
+                    {% for menu in menus %}
+                        {% if menu.menu_num|int>20 and menu.menu_num|int<41 %}
+                            <li>{{ menu.menu_num }}. {{ menu.menu_name }}</li>
+
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <ul class="col-md-3">
+                    {% for menu in menus %}
+                        {% if  menu.menu_num|int>40 and menu.menu_num|int<61 %}
+                            <li>{{ menu.menu_num }}. {{ menu.menu_name }}</li>
+
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <ul class="col-md-3">
+                    {% for menu in menus %}
+                        {% if  menu.menu_num|int>60 and menu.menu_num|int<81 %}
+                            <li>{{ menu.menu_num }}. {{ menu.menu_name }}</li>
+
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <ul class="col-md-3">
+                    {% for menu in menus %}
+                        {% if  menu.menu_num|int>80 and menu.menu_num|int<101 %}
+                            <li>{{ menu.menu_num }}. {{ menu.menu_name }}</li>
+
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <ul class="col-md-3">
+                    {% for menu in menus %}
+                        {% if  menu.menu_num|int>100 and menu.menu_num|int<120 %}
+                            <li>{{ menu.menu_num }}. {{ menu.menu_name }}</li>
+
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+        <div class="table-div qr-div">
+            <h4 class="qr-title">评分二维码</h4>
+            <div class="row">
+                <div class="col-md-8" id="input-div">
+
+                    <div class="row">
+                        <div class="col-md-3 min-title">餐桌号：</div>
+                        <div class="col-md-8 input-div"><input class="menu-num" type="text" maxlength="3"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 min-title">菜品编号：</div>
+                        <div class="col-md-8 input-div" id="menu-input-div"><input class="menu-num" type="text" maxlength="3"></div>
+                    </div>
+
+                </div>
+                <div class="col-md-3 table-div" id="menu-detail">
+                    <div>已输入菜品：</div>
+                    <ul id="menu-tem"></ul>
+                </div>
+            </div>
+
+            <div class="btn-div">
+                <button class="btn btn-primary btn-block" id="print-btn">打印二维码</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

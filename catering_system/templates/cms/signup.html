@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理帐号注册</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+        {% include "common/_head.html" %}
+
+    <link href="../../static/cms/login/css/signup.css" rel="stylesheet" type="text/css"/>
+{#    <script type="text/javascript" src="../../static/cms/login/js/jquery.min.js"></script>#}
+</head>
+
+
+<div class="aui-register-popup">
+    <div class="aui-register-box">
+        <div class="aui-register-link">
+            <a href="javascript:;" class="fl">返回首页</a>
+            <a href="{{ url_for('cms.login') }}" class="fr">已有账号？去登录</a>
+        </div>
+        <div class="aui-register-logo">
+            <img src="../../static/cms/login/images/logo.png" alt="">
+        </div>
+        <div class="aui-register-form" id="verifyCheck">
+            <div class="register-wrap" id="register-wrap">
+                <div class="register" id="register">
+                    <div class="register-top" id="reg-top">
+                        <h2 class="nopassword" id="nopw">帐号注册</h2>
+                        <!--                        <a id="qrcode" href="#">-->
+                        <!--                            <span class="aui-tag-size">扫码登录</span>-->
+                        <!--                        </a>-->
+                    </div>
+                    <!--账户密码登录-->
+
+
+                    <!--手机动态码登录-->
+                    <div class="login-con" id="lc">
+
+
+                        <div class="aui-register-form-item">
+                            <input type="text" name="phone" placeholder="手机号码" class="txt01 f-r3 required"
+                                   keycodes="tel" tabindex="1" data-valid="isNonEmpty||isPhone"
+                                   data-error="><i class='icon-tips'></i>请输入手机号||<i class='icon-tips'></i>手机号码格式不正确"
+                                   maxlength="11" id="phone">
+                            <label class="focus valid">
+                                <div class="msg" style="display:none"><i class='icon-tips'></i>您还未输入手机号</div>
+                            </label>
+                            <span class="aui-get-code btn btn-gray f-r3 f-ml5 f-size13" id="time_box" disabled
+                                  style="display:none;"></span>
+                            <span class="aui-get-code btn btn-gray f-r3 f-ml5 f-size13" id="verifyYz">获取动态码</span>
+                        </div>
+                        <div class="aui-register-form-item">
+                            <input type="text" placeholder="动态码" maxlength="6" id="verifyNo"
+                                   class="txt02 f-r3 f-fl required" tabindex="2" data-valid="isNonEmpty||isInt"
+                                   data-error="><i class='icon-tips'></i>请填写正确的手机动态码||<i class='icon-tips'></i>请填写6位手机动态码">
+                            <label class="focus valid"></label>
+                        </div>
+
+                        <div class="aui-register-form-item">
+                            <input type="text" placeholder="姓名" maxlength="3" id="user-name"
+                                   class="txt02 f-r3 f-fl required" tabindex="2" data-valid="isNonEmpty||isUsername"
+                                   data-error="><i class='icon-tips'></i>请填写姓名||<i class='icon-tips'></i>请填写2-3位的中文姓名">
+                            <label class="focus valid"></label>
+                        </div>
+                         <div class="aui-register-form-item">
+                            <input type="password" placeholder="密码" maxlength="16" id="pwd"
+                                   class="txt02 f-r3 f-fl required" tabindex="2" data-valid="isNonEmpty||isPwd"
+                                   data-error="><i class='icon-tips'></i>请填写密码||<i class='icon-tips'></i>请输入6-16位大、小写字母、数字或特殊字符(!#*_)，至少包含其中两种类型的密码">
+                            <label class="focus valid"></label>
+                        </div>
+
+                        <div class="aui-register-form-item">
+                            <input type="text" placeholder="邀请码" maxlength="8" id="invite"
+                                   class="txt02 f-r3 f-fl required" tabindex="2" data-valid="isNonEmpty||isInvite"
+                                   data-error="><i class='icon-tips'></i>请填写正确的邀请码||<i class='icon-tips'></i>请填写8位邀请码">
+                            <label class="focus valid"></label>
+                        </div>
+                        <div class="aui-register-form-item">
+                            <input id="aui-btn-reg" class="aui-btn-reg" placeholder="" readonly="readonly" value="注册">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<script type="text/javascript" src="../../static/cms/login/js/signup.js"></script>
+
+</body>
+</html>

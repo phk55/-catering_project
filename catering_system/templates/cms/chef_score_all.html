@@ -1,0 +1,54 @@
+{% extends 'cms/cms_base.html' %}
+{% block title %}
+    评分汇总
+{% endblock %}
+{% block head %}
+    {% include "common/_ecahrts.html" %}
+
+    <link rel="stylesheet" href="{{ static('cms/css/chef_score_all.css') }}">
+    <script src="{{ static('cms/js/chef_score_all.js') }}"></script>
+
+
+{% endblock %}
+{% block main_content %}
+
+    <div class="row score-row">
+        <div class="col-md-2">
+            <div class="col-div min-col-div">
+                <div class="title-div">厨师</div>
+                <div class="menu-div">
+                    <ul class="list-group">
+                        {% for chef in chefs %}
+                            {% if loop.first %}
+                                <li class="list-group-item active chef-li">{{ loop.index }}. {{ chef.username }}
+                                    {% if chef.TAG|int==0 %}
+                                        <span style="font-size: 13px">[已离职]</span>
+                                    {% endif %}
+
+                                </li>
+                            {% else %}
+                                <li class="list-group-item chef-li">{{ loop.index }}. {{ chef.username }}
+                                    {% if chef.TAG|int==0 %}
+                                        <span style="font-size: 13px">[已离职]</span>
+
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+{#            <div class="col-div min-col-div">#}
+{#                <div class="title-div">菜品</div>#}
+{#            </div>#}
+        </div>
+        <div class="col-md-9 col-div">
+            <div id="test" style="height: 100%">
+            </div>
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
