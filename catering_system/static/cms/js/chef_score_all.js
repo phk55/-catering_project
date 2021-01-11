@@ -10,7 +10,7 @@ function get_data(chef_lis, cur_chef,) {
         },
         'success': function (data) {
             if (data['code'] === 200) {
-                console.log(data['data']['end_date'])
+                console.log(data['data'])
 
                 function test(data) {
 
@@ -21,9 +21,30 @@ function get_data(chef_lis, cur_chef,) {
                     setTimeout(function () {
 
                         option = {
-                            legend: {
-                                top: "8%"
+                            legend: [{
+                                top: "8%",
+                                left: '48%',
+
+                                // icon: "roundRect"
+                                data: ['1分', '2分', '3分', '4分', '5分'],
+                                icon: "circle",   //  设置形状  类型包括 circle，rect ，roundRect，triangle，diamond，pin，arrow，none
                             },
+                                {
+                                    top: "8%",
+                                    left: '32%',
+                                    // icon: "roundRect"
+                                    data: ['当月评分量', '当月总分'],
+                                    // icon: "circle",   //  设置形状  类型包括 circle，rect ，roundRect，triangle，diamond，pin，arrow，none
+                                },
+                                {
+                                    top: "12%",
+                                    // left: '10%',
+                                    // icon: "roundRect"
+                                    data: data['data']['menu_name'],
+                                    icon: "diamond",   //  设置形状  类型包括 circle，rect ，roundRect，triangle，diamond，pin，arrow，none
+                                }
+                            ],
+
                             title: {
                                 left: 'center',
                                 text: '厨师-评分-菜品关系图',
@@ -31,15 +52,38 @@ function get_data(chef_lis, cur_chef,) {
                             },
                             tooltip: {
                                 trigger: 'axis',
-                                showContent: false,
+                                showContent: true,
 
                             },
                             dataset: [
                                 {source: data['data']['month_score_data']},
-                                {source: data['data']['month_menu_data']}
+                                {source: data['data']['month_menu_data']},
+                                {source: data['data']['total']}
                             ],
                             xAxis: {type: 'category'},
-                            yAxis: {gridIndex: 0},
+                            yAxis: [
+                                // {gridIndex: 0},
+                                {
+                                    type: 'value',
+                                    name: '当月评分量/份数',
+                                    min: 0,
+                                    max: data.max,
+                                    interval: 10,
+                                    // axisLabel: {
+                                    //     formatter: '{value} ml'
+                                    // }
+                                },
+                                {
+                                    type: 'value',
+                                    name: '当月总分',
+                                    min: 0,
+                                    max: data.max,
+                                    interval: 20,
+                                    // axisLabel: {
+                                    //     formatter: '{value} °C'
+                                    // }
+                                }
+                            ],
                             grid: {top: '55%'},
                             dataZoom: [{
                                 type: 'inside',
@@ -59,16 +103,33 @@ function get_data(chef_lis, cur_chef,) {
                                 }
                             }],
                             series: [
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row', datasetIndex: 0},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row', datasetIndex: 0},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row', datasetIndex: 0},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row', datasetIndex: 0},
+                                // {type: 'line', smooth: true, seriesLayoutBy: 'row', datasetIndex: 0},
+                                // {type: 'line', smooth: true, seriesLayoutBy: 'row', datasetIndex: 0},
+                                // {type: 'line', smooth: true, seriesLayoutBy: 'row', datasetIndex: 0},
+                                // {type: 'line', smooth: true, seriesLayoutBy: 'row', datasetIndex: 0},
+                                {
+                                    type: 'line',
+                                    smooth: true,
+                                    seriesLayoutBy: 'row',
+                                    yAxisIndex: 0,
+                                    datasetIndex: 2,
+                                    color: ['#0e72cc']
+                                },
+                                {
+                                    type: 'line',
+                                    smooth: true,
+                                    seriesLayoutBy: 'row',
+                                    yAxisIndex: 1,
+                                    datasetIndex: 2,
+                                    color: ['#f59311']
+
+                                },
 
                                 {
                                     type: 'pie',
                                     id: 'pie',
-                                    radius: '30%',
-                                    center: ['25%', '35%'],
+                                    radius: '25%',
+                                    center: ['28%', '35%'],
                                     datasetIndex: 0,
                                     label: {
                                         formatter: '{b}: {@2020-08} ({d}%)'
@@ -77,13 +138,17 @@ function get_data(chef_lis, cur_chef,) {
                                         itemName: 'date',
                                         value: data['data']['end_date'],
                                         tooltip: data['data']['end_date']
-                                    }
+                                    },
+                                    // color: ['#63b2ee', '#76da91', '#f8cb7f', '#f89588', '#7cd6cf']
+                                    color: ['#50c48f', '#26ccd8', '#3685fe', '#9977ef', '#f47a75'],
+
                                 },
+
                                 {
                                     type: 'pie',
                                     id: 'pie2',
-                                    radius: '30%',
-                                    center: ['75%', '35%'],
+                                    radius: '25%',
+                                    center: ['68%', '35%'],
                                     datasetIndex: 1,
                                     label: {
                                         formatter: '{b}: {@2020-08} ({d}%)'
@@ -92,11 +157,16 @@ function get_data(chef_lis, cur_chef,) {
                                         itemName: 'date',
                                         value: data['data']['end_date'],
                                         tooltip: data['data']['end_date']
-                                    }
+                                    },
+
+
+                                    color: ['#05f8d6', '#0082fc', '#fdd845', '#f47a75', '#22ed7c', '#09b0d3', '#1d27c9', '#f9e264', '#009db2', '#024b51'],
+
+
                                 }
 
 
-                            ]
+                            ],
                         };
 
                         myChart.on('updateAxisPointer', function (event) {

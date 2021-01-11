@@ -138,6 +138,8 @@ function get_data(month_lis, menu_lis, table_num_lis, cur_month, cur_menu_id, ta
                                 label: {
                                     show: false
                                 },
+                               color: ['#50c48f', '#26ccd8', '#3685fe', '#9977ef', '#f5616f'],
+
                                 // data: [
                                 //     {value: 10, name: '1'},
                                 //     {value: 5, name: '2'},
@@ -272,7 +274,7 @@ function get_data(month_lis, menu_lis, table_num_lis, cur_month, cur_menu_id, ta
                                 areaStyle: {
                                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                         offset: 0,
-                                        color: 'rgb(255, 158, 68)'
+                                        color: 'rgb(241,176,119)'
                                     }, {
                                         offset: 1,
                                         color: 'rgb(255, 70, 131)'
@@ -390,6 +392,8 @@ function get_data(month_lis, menu_lis, table_num_lis, cur_month, cur_menu_id, ta
                                 label: {
                                     show: false
                                 },
+                                color: ['#50c48f', '#26ccd8', '#3685fe', '#9977ef', '#f5616f'],
+
                                 // data: [
                                 //     {value: 10, name: '1'},
                                 //     {value: 5, name: '2'},

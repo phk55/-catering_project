@@ -488,18 +488,31 @@ def chefscoredata():
         score3 = [0] * (len(month_list))
         score4 = [0] * (len(month_list))
         score5 = [0] * (len(month_list))
+        total = [0] * (len(month_list))
         score1.insert(0, '1分')
         score2.insert(0, '2分')
         score3.insert(0, '3分')
         score4.insert(0, '4分')
         score5.insert(0, '5分')
+        total.insert(0, '当月评分量')
         score_dict = {'date': month_list2, '1': score1, '2': score2, '3': score3, '4': score4, '5': score5, }
         for score in scores:
             index_num = month_list2.index(score.create_time.strftime('%Y-%m'))
             score_dict[str(score.score)][index_num] += 1
+            total[index_num] += 1
         month_score_data = list(score_dict.values())
-
-        return month_score_data
+        # print(month_menu_data)
+        # print(score_dict)
+        total_score = [0] * len(month_list)
+        total_score.insert(0, '当月总分')
+        for i in range(1, len(month_list2)):
+            total_score[i] += score_dict.get('1')[i] * 1
+            total_score[i] += score_dict.get('2')[i] * 2
+            total_score[i] += score_dict.get('3')[i] * 3
+            total_score[i] += score_dict.get('4')[i] * 4
+            total_score[i] += score_dict.get('5')[i] * 5
+        # print(total_score)
+        return month_score_data, total, total_score
 
     def menu_month():
 
@@ -526,14 +539,20 @@ def chefscoredata():
             menu_dict[score.score_menu.menu_name][index_num] += 1
             key_lis.append(score.score_menu.menu_name)
         menu_month_data = list(menu_dict.values())
-        return menu_month_data
+        menu_name = list(menu_dict.keys())
+        # print(menu_dict)
+        menu_name.pop(0)
+        # print(menu_name)
+        return menu_month_data, menu_name
 
-    month_score_data = score_month()
-    month_menu_data = menu_month()
-    # print(month_menu_data)
+    month_score_data, total, total_score = score_month()
+    month_menu_data, menu_name = menu_month()
+    # print(menu_name)
+
     data = {
         'code': 200,
-        'data': {'month_score_data': month_score_data, 'month_menu_data': month_menu_data, 'end_date': month_list2[-1]},
+        'data': {'month_score_data': month_score_data, 'month_menu_data': month_menu_data, 'end_date': month_list2[-1],
+                 'total': [month_list2, total, total_score], 'menu_name': menu_name},
         'message': ''
     }
     return jsonify(data)
@@ -556,6 +575,20 @@ def others():
     }
     return render_template('cms/others.html', **context)
 
+
+@bp.route('/deltable/',methods=['POST'])
+@login_required
+def deltable():
+    table_num_id = request.form['table_num_id']
+    # print(table_num_id)
+    table_num = DiningTableModel.query.get(int(table_num_id))
+    score = table_num.servers.all()
+    # print(score)
+    if score:
+        return restful.params_error('删除失败，已绑定相关评分！')
+    db.session.delete(table_num)
+    db.session.commit()
+    return restful.success()
 #
 # @bp.route('/addtable/')
 # def addtable():

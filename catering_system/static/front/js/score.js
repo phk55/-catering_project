@@ -54,7 +54,8 @@ $(function () {
             },
             'success': function (data) {
                 if (data['code'] == 200) {
-                    window.location.reload()
+                    alert('成功！')
+                    window.location='/'
                 } else {
                     myalert.alertInfo(data['message'])
                 }

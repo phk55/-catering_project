@@ -69,7 +69,7 @@ def score(ids):
     # print(id)
     if '&' in ids:
         ids = ids.split('&')
-    ids = ['1', '005', '302', '002', '004']
+    # ids = ['1', '005', '302', '002', '004']
 
     menus = []
     new_ids = []

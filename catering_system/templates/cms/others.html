@@ -3,7 +3,9 @@
     其他
 {% endblock %}
 {% block head %}
+    <link rel="stylesheet" href="{{ static('cms/css/others.css') }}">
 
+    <script src="{{ static('cms/js/others.js') }}"></script>
 {% endblock %}
 {% block main_content %}
 
@@ -20,9 +22,23 @@
                 </div>
             </form>
             <div>
-                {% for table_num in table_nums %}
-                    <span>{{ table_num.table_num }}</span>
-                {% endfor %}
+                <table class="table">
+                    {% for i in range(0,table_nums|length,3) %}
+                        <tr>
+                            <td data-table-id="{{ table_nums[i].id }}">{{ table_nums[i].table_num }}<i class="bx bx-trash del-btn"></i></td>
+                            {% if i+1<table_nums|length %}
+                                <td data-table-id="{{ table_nums[i+1].id }}">{{ table_nums[i+1].table_num}}<i class="bx bx-trash del-btn"></i></td>
+                            {% endif %}
+                            {% if i+2<table_nums|length %}
+                                <td data-table-id="{{ table_nums[i+2].id }}">{{ table_nums[i+2].table_num}}<i class="bx bx-trash del-btn"></i></td>
+
+                            {% endif %}
+
+                        </tr>
+
+                    {% endfor %}
+                </table>
+
 
             </div>
 
