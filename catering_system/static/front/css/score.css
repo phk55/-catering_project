@@ -71,7 +71,30 @@
 }
 .suggest-div{
     /*margin-left: 2em;*/
+    margin-top: 2em;
 }
 .info-p{
     font-size: 13px;
+}
+.lq-score-tip{
+    /*background: #00b3ff;*/
+    padding-bottom: 0!important;
+    padding-left: 0!important;
+    margin-bottom: 0!important;
+    margin-top: 0!important;
+    font-size: 13px;
+}
+.lq-score{
+    /*background: #00e7f7;*/
+    padding-bottom: 0!important;
+    padding-left: 0!important;
+    margin-bottom: 0!important;
+    margin-top: 0!important;
+}
+.myapp-tip{
+    /*background: #00e7f7;*/
+    padding-bottom: 0!important;
+    padding-left: 0!important;
+    margin-bottom: 0!important;
+    margin-top: 0!important;
 }

@@ -6,6 +6,7 @@ from exit import db
 import config
 import json
 import uuid
+import os
 
 bp = Blueprint('front', __name__)
 
@@ -35,7 +36,10 @@ def placeorder():
                 tem_list.append(i)
         num_str = '&'.join(tem_list)
         score_url = config.SCORE_URL + num_str
-        ewm.qr_single_code(score_url, 'qr_images\\' + str(uuid.uuid4()) + '.png')
+        ewm_path=os.path.join(os.getcwd(),'qr_images/' + str(uuid.uuid4()) + '.png')
+        # print(ewm_path)
+
+        ewm.qr_single_code(score_url, ewm_path)
         print(score_url)
         return restful.success()
 
