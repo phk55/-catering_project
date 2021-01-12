@@ -42,7 +42,7 @@ $(function () {
         var score0 = document.getElementById('tip0').innerText
         var suggest = document.getElementById('suggest-text').value
         var ids = document.getElementById('ids').value
-        score_array.push(score0, suggest,ids)
+        score_array.push(score0, suggest, ids)
         console.log(score_array)
         var score_data = JSON.stringify(score_array)
         // var cur_url = window.location.href
@@ -55,7 +55,7 @@ $(function () {
             'success': function (data) {
                 if (data['code'] == 200) {
                     alert('成功！')
-                    window.location='/'
+                    window.location = '/'
                 } else {
                     myalert.alertInfo(data['message'])
                 }

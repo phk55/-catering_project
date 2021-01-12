@@ -1,3 +1,6 @@
+body{
+    min-width: 1200px;
+}
 .score-row {
     /*height: 600px;*/
 }

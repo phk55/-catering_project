@@ -292,14 +292,14 @@ def chef():
                 user.menus.append(menu)
             db.session.add(user)
             db.session.commit()
-
             return restful.success()
 
         else:
             if user:
                 return restful.params_error('该员工已存在系统里，如果有新增的同名员工，可在名字后面加数字以示区分，如小明2...')
             else:
-                user = CMSUser(username=chef_name, password=88888888, phone_number=1111, TAG=1)
+                pwd='123456aa'
+                user = CMSUser(username=chef_name, password=pwd, phone_number=1111, TAG=1)
                 for menu_id in menu_id_list:
                     menu = MenuModels.query.get(int(menu_id))
                     user.menus.append(menu)

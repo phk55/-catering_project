@@ -166,12 +166,14 @@ a {
 }
 
 .aui-register-box {
+    text-align: center;
     position: relative;
-    width: 476px;
+    width: 20%;
     padding-bottom: 10px;
-    margin-top: 44px;
-    margin-left: 50%;
-    left: -238px;
+    margin-top: 5em;
+    margin-left: 40%;
+    margin-right:40%;
+    /*left: -238px;*/
     border-radius: 3px;
     background: #fff;
     box-shadow: 0 2px 6px 2px rgba(0,0,0,.24);
@@ -204,7 +206,7 @@ a {
 }
 
 .aui-register-form-item {
-    width: 350px;
+    width: 90%;
     margin: 20px auto;
     position: relative;
     text-align: justify;
@@ -250,7 +252,7 @@ a {
 
 .aui-register-tag {
     text-align: center;
-    width: 350px;
+    width: 100%;
     margin: 0 auto;
     position: relative;
     top: 4px;
@@ -499,7 +501,7 @@ a {
 }
 
 .tips_img {
-    width: 208px;
+    width: 100%;
     height: 202px;
     float: right;
     background-image: url("../images/app.png");
@@ -607,7 +609,7 @@ a {
 }
 
 .aui-thirds {
-    width: 350px;
+    width: 100%;
     margin: 20px auto;
     position: relative;
 }
